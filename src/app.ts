@@ -5,8 +5,11 @@ import container from './inversifyConfig';
 import dotenv from 'dotenv'
 import swaggerDocument from '../swagger.json'
 import swaggerUi from 'swagger-ui-express';
+import connection from './config/dbConfig'
 dotenv.config();
 
+// Connect to database
+connection
 // Set up Express server
 const app = express();
 

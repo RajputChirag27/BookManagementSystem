@@ -1,4 +1,6 @@
 import { Container } from 'inversify';
+import * as controller from './controllers/index'
+import UserService from './services/user/userService';
 // import { BookController } from './controllers/BookController';
 // import { AuthorController } from './controllers/AuthorController';
 // import { CategoryController } from './controllers/CategoryController';
@@ -15,12 +17,14 @@ import { Container } from 'inversify';
 const container = new Container();
 
 // // Controllers
+container.bind<controller.UserController>(controller.UserController).toSelf();
 // container.bind<BookController>(BookController).toSelf();
 // container.bind<AuthorController>(AuthorController).toSelf();
 // container.bind<CategoryController>(CategoryController).toSelf();
 // container.bind<AuthController>(AuthController).toSelf();
 
 // // Services
+container.bind<UserService>(UserService).toSelf();
 // container.bind<BookService>(BookService).toSelf();
 // container.bind<AuthorService>(AuthorService).toSelf();
 // container.bind<CategoryService>(CategoryService).toSelf();
