@@ -1,3 +1,8 @@
 import { User } from "./user/userInterface";
+import { AuthenticatedRequest } from "./auth/authInterface";
+import { Category } from "./category/categoryInterface";
 
-export {User};
+
+export {Category};
+export { AuthenticatedRequest };
+export { User };

@@ -1,32 +1,46 @@
-import 'reflect-metadata';
+// app.ts
+import 'reflect-metadata'
 import express from 'express';
-import { InversifyExpressServer } from 'inversify-express-utils';
-import container from './inversifyConfig';
-import dotenv from 'dotenv'
+import { InversifyExpressServer, cookies } from 'inversify-express-utils';
+import mongoose from 'mongoose';
+import  container  from './inversifyConfig';
+import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from '../swagger.json'
-import swaggerUi from 'swagger-ui-express';
-import connection from './config/dbConfig'
-dotenv.config();
+import cookieParser from 'cookie-parser'
+import session from 'express-session'
+import dotenv from 'dotenv';
+const result = dotenv.config()
 
-// Connect to database
-connection
-// Set up Express server
+
+// Set up mongoose connection
+
+import './config/dbConfig'
+
+// console.log(process.env)
+
+const port = process.env.PORT || 3000;
+
+
 const app = express();
+app.use(cookieParser());
+app.use(express.json());
 
-// Create InversifyExpressServer instance
-const server = new InversifyExpressServer(container, null, { rootPath: '/api' }, app);
 
-// Configure swagger
+app.use(session({
+    secret: 'your_secret_key', // Replace with a random secret key
+    resave: true,
+    saveUninitialized: false
+}));
+
+
+// Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Configure controllers
-server.setConfig((app) => {
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-});
+// Set up InversifyExpressServer
+const server = new InversifyExpressServer(container, null, { rootPath: '/api' }, app);
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+const appConfigured = server.build();
+
+appConfigured.listen(port, () => {
+    console.log('Server is running on port '+ port);
 });

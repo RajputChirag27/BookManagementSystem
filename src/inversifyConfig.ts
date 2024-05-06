@@ -1,5 +1,7 @@
 import { Container } from 'inversify';
-import * as controller from './controllers/index'
+import * as controller from './controllers'
+import * as repository from './repositories'
+import * as service from './services/index'
 import UserService from './services/user/userService';
 // import { BookController } from './controllers/BookController';
 // import { AuthorController } from './controllers/AuthorController';
@@ -18,19 +20,23 @@ const container = new Container();
 
 // // Controllers
 container.bind<controller.UserController>(controller.UserController).toSelf();
+container.bind<controller.CategoryController>(controller.CategoryController).toSelf();
 // container.bind<BookController>(BookController).toSelf();
 // container.bind<AuthorController>(AuthorController).toSelf();
 // container.bind<CategoryController>(CategoryController).toSelf();
 // container.bind<AuthController>(AuthController).toSelf();
 
 // // Services
-container.bind<UserService>(UserService).toSelf();
+container.bind<service.UserService>(service.UserService).toSelf();
+container.bind<service.CategoryService>(service.CategoryService).toSelf();
 // container.bind<BookService>(BookService).toSelf();
 // container.bind<AuthorService>(AuthorService).toSelf();
 // container.bind<CategoryService>(CategoryService).toSelf();
 // container.bind<AuthService>(AuthService).toSelf();
 
 // // Repositories
+   container.bind<repository.UserRepository>(repository.UserRepository).toSelf()
+   container.bind<repository.CategoryRepository>(repository.CategoryRepository).toSelf();
 // container.bind<BookRepository>(BookRepository).toSelf();
 // container.bind<AuthorRepository>(AuthorRepository).toSelf();
 // container.bind<CategoryRepository>(CategoryRepository).toSelf();
