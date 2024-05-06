@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { CategoryRepository } from "../../repositories/";
-import { Category } from "../../interfaces/category/categoryInterface";
+import { Category } from "../../interfaces/categoryInterface/categoryInterface";
 
 @injectable()
 export default class CategoryService {
@@ -27,9 +27,7 @@ export default class CategoryService {
     async deleteCategory(id : string){
         return await this.categoryRepository.deleteCategory(id);
     }
-    // async getCategoryByProductId(id : string){
-    //     return await this.categoryRepository.getCategoryByProductId(id);
-    // }
+
     async searchCategories(keyword: string) {
         return await this.categoryRepository.searchCategories(keyword);
     }

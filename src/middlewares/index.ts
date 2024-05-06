@@ -1,3 +1,3 @@
-import { authenticateJwt } from "./auth/authMiddleware";
+import { authenticateJwt } from "./authMiddleware/authMiddleware";
 
 export {authenticateJwt};

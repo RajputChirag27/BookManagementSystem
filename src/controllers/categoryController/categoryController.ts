@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { injectable, inject } from 'inversify';
+import { inject } from 'inversify';
 import { controller, httpDelete, httpGet, httpPatch, httpPost, httpPut, request, response } from 'inversify-express-utils';
 import { CategoryService } from '../../services';
 import { Category } from 'src/interfaces';

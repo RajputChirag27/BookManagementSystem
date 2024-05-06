@@ -1,12 +1,12 @@
 import { controller, httpGet, httpPost } from "inversify-express-utils";
 import { NextFunction, Request, Response } from "express";
-import UserService from "../../services/user/userService";
+import UserService from "../../services/userService/userService";
 import { inject } from "inversify";
 import { User } from "../../interfaces/index";
 import dotenv from 'dotenv'
 dotenv.config();
 import jwt from 'jsonwebtoken'
-import { AuthenticatedRequest } from "../../interfaces/";
+import { AuthenticatedRequest } from "../../interfaces";
 import { authenticateJwt } from "../../middlewares";
 
 @controller('/users')
