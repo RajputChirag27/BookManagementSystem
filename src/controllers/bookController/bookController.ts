@@ -3,13 +3,14 @@ import { inject } from 'inversify';
 import { controller, httpGet, httpPost, httpPut, httpDelete, httpPatch } from 'inversify-express-utils';
 import { BookService } from '../../services';
 import { Book } from '../../interfaces';
+import { JwtAuthenticationMiddleware } from '../../middlewares';
 
 @controller('/books')
 export class BookController {
 
   constructor(@inject(BookService) private bookService: BookService) { }
 
-  @httpPost('/')
+  @httpPost('/', JwtAuthenticationMiddleware)
   async createBook(req: Request, res: Response) {
     try {
       const bookData: Book = req.body;
@@ -32,7 +33,7 @@ export class BookController {
     }
   }
 
-  @httpPatch('/:id')
+  @httpPatch('/:id',JwtAuthenticationMiddleware)
   async updateBook(req: Request, res: Response) {
     try {
       const id: string = req.params.id;
@@ -48,7 +49,7 @@ export class BookController {
     }
   }
 
-  @httpDelete('/:id')
+  @httpDelete('/:id', JwtAuthenticationMiddleware)
   async deleteBook(req: Request, res: Response) {
     try {
       const id: string = req.params.id;
@@ -93,7 +94,7 @@ export class BookController {
     }
   }
 
-  @httpGet('/:id')
+  @httpGet('/:id', JwtAuthenticationMiddleware)
   async getBookById(req: Request, res: Response) {
     try {
       const id: string = req.params.id;

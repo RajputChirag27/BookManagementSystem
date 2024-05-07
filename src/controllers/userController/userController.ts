@@ -1,17 +1,22 @@
-import { controller, httpGet, httpPost } from "inversify-express-utils";
+import { BaseHttpController, controller, httpGet, httpPost } from "inversify-express-utils";
 import { NextFunction, Request, Response } from "express";
 import UserService from "../../services/userService/userService";
 import { inject } from "inversify";
 import { User } from "../../interfaces/index";
 import dotenv from 'dotenv'
+import * as express from 'express';
 dotenv.config();
-import jwt from 'jsonwebtoken'
+
 import { AuthenticatedRequest } from "../../interfaces";
 import { authenticateJwt } from "../../middlewares";
+import { JwtAuthenticationMiddleware } from "../../middlewares";
+import container from "../../inversifyConfig";
+
 
 @controller('/users')
 export class UserController {
-    constructor(@inject(UserService) private userService: UserService) { }
+    constructor(@inject(UserService) private userService: UserService) {
+    }
 
     @httpPost('/signup')
     async signup(req: Request, res: Response) {
@@ -36,13 +41,13 @@ export class UserController {
 
             const userFromDb = await this.userService.login(user);
             // console.log(userFromDb)
-            if(userFromDb){
-                const payload =  user;
+            if (userFromDb) {
+                const payload = user;
                 // Create a token
                 const token = await this.userService.createToken(payload)
                 console.log(token);
-                res.send({userFromDb, token });
-            }else{
+                res.send({ userFromDb, token });
+            } else {
                 res.send("User not found");
             }
         } catch (err) {
@@ -50,11 +55,11 @@ export class UserController {
         }
     }
 
-    @httpGet('/protected', authenticateJwt)
-    async protected(req: AuthenticatedRequest, res: Response){
-        try{
+    @httpGet('/protected', JwtAuthenticationMiddleware)
+    async protected(req: AuthenticatedRequest, res: Response) {
+        try {
             res.send("Protected Route")
-        } catch(err){
+        } catch (err) {
             res.send(err)
         }
     }

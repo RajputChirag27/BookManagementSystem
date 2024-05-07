@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { inject } from "inversify";
-import { controller, httpGet, httpPost, httpDelete, httpPatch, request, response } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, httpPatch, request, response, Middleware } from "inversify-express-utils";
 import { AuthorService } from "../../services/authorService/authorService";
 import { Author } from "../../interfaces";
-import { authenticateJwt } from "../../middlewares";
+import { JwtAuthenticationMiddleware, authenticateJwt } from "../../middlewares";
+import container from "../../inversifyConfig";
 
 
-@controller('/author' ,authenticateJwt)
+@controller('/author', JwtAuthenticationMiddleware)
 export class AuthorController {
     constructor(@inject(AuthorService) private authorService: AuthorService) { }
 

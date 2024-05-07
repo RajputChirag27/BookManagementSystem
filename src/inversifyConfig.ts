@@ -3,6 +3,7 @@ import * as controller from './controllers'
 import * as repository from './repositories'
 import * as service from './services/index'
 import { makeLoggerMiddleware } from 'inversify-logger-middleware';
+import { JwtAuthenticationMiddleware } from './middlewares';
 
 
 const container = new Container();
@@ -18,6 +19,9 @@ for (const serviceName in service) {
    const Service = service[serviceName];
    container.bind<typeof Service>(Service).toSelf();
 }
+
+// middlewares
+container.bind<JwtAuthenticationMiddleware>(JwtAuthenticationMiddleware).toSelf();
 
 // repositories
 for (const repositoryName in repository) {
