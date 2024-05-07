@@ -3,6 +3,7 @@ import Author from "../../interfaces/authorInterface/authorInterface";
 
 const AuthorSchema = new Schema<Author>({
     name: { type: String, required: true, unique: true },
+    email: {type: String, required: true, unique: true},
     biography: { type: String, required: true },
     nationality: { type: String, required: true },
     books: [{ type: Schema.Types.ObjectId, ref: 'Book' }] // Assuming 'Book' is the model name for books

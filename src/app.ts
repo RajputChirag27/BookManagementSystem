@@ -11,7 +11,6 @@ import session from 'express-session'
 import dotenv from 'dotenv';
 const result = dotenv.config()
 
-
 // Set up mongoose connection
 
 import './config/dbConfig'

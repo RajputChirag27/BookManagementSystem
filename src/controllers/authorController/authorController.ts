@@ -2,17 +2,17 @@ import { Request, Response } from "express";
 import { inject } from "inversify";
 import { controller, httpGet, httpPost, httpDelete, httpPatch, request, response } from "inversify-express-utils";
 import { AuthorService } from "../../services/authorService/authorService";
-import { Author } from "src/interfaces";
+import { Author } from "../../interfaces";
+import { authenticateJwt } from "../../middlewares";
 
 
-@controller('/author')
+@controller('/author' ,authenticateJwt)
 export class AuthorController {
     constructor(@inject(AuthorService) private authorService: AuthorService) { }
 
     @httpGet('/getAuthors')
     public async getAuthors(@request() req: Request, @response() res: Response) {
         try {
-
             const authors = await this.authorService.getAuthors();
             res.send(authors)
         } catch (err) {
