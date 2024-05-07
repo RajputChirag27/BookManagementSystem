@@ -11,7 +11,9 @@ export class CategoryController {
     @httpGet('/getAllCategories')
     async getAllCategories(req: Request, res: Response): Promise<void> {
         try {
-            const categories = await this.categoryService.getAllCategories();
+            const page: number = parseInt(req.query.page as string) || 1;
+            const limit: number = parseInt(req.query.limit as string) || 10;
+            const categories = await this.categoryService.getAllCategories(page, limit);
             res.status(200).json(categories);
         } catch (error) {
             res.status(500).json({ error: 'Internal Server Error', message: error });
@@ -48,9 +50,9 @@ export class CategoryController {
     async updateCategory(req: Request, res: Response): Promise<void> {
         const id = req.params.id;
         const name = req.body.name;
-        console.log(id,name)
+        console.log(id, name)
         try {
-            const category : Category = await this.categoryService.updateCategory(id, name);
+            const category: Category = await this.categoryService.updateCategory(id, name);
             console.log(category)
             if (!category) {
                 res.status(404).json({ error: 'Category not found' });
@@ -63,11 +65,11 @@ export class CategoryController {
     }
 
     @httpDelete('/deleteCategory/:id')
-    async deleteCategory(req: Request, res: Response):  Promise<void> {
+    async deleteCategory(req: Request, res: Response): Promise<void> {
         const categoryId = req.params.id;
         try {
             const deleted = await this.categoryService.deleteCategory(categoryId);
-            res.send({deleted, message:"Deleted Successfully"})
+            res.send({ deleted, message: "Deleted Successfully" })
             if (!deleted) {
                 res.status(404).json({ error: 'Category not found' });
                 return;

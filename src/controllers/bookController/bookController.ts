@@ -25,8 +25,8 @@ export class BookController {
     try {
       const page: number = parseInt(req.query.page as string) || 1;
       const limit: number = parseInt(req.query.limit as string) || 10;
-      const { books, totalBooks } = await this.bookService.getBooks(page, limit);
-      res.status(200).json({ books, totalBooks, page });
+      const data = await this.bookService.getBooks(page, limit);
+      res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ message: 'Could not retrieve books', error: error.message });
     }
@@ -64,25 +64,25 @@ export class BookController {
   }
 
 
-  @httpGet('/filter') 
+  @httpGet('/filter')
   async filterBooks(req: Request, res: Response) {
     try {
       const query = req.query.query || '';
       const minPrice: number = parseFloat(req.query.minPrice as string) || 0;
       const maxPrice: number = parseFloat(req.query.maxPrice as string) || Number.POSITIVE_INFINITY;
-      if(query === ''){
-        const book = await this.bookService.filterBooksByPrice(minPrice,maxPrice);
+      if (query === '') {
+        const book = await this.bookService.filterBooksByPrice(minPrice, maxPrice);
         res.send(book);
         return;
       }
-      const books = await this.bookService.filterBooks(query,minPrice,maxPrice);
+      const books = await this.bookService.filterBooks(query, minPrice, maxPrice);
       res.status(200).json(books);
     } catch (error) {
       res.status(500).json({ message: 'Could not filter books', error: error.message });
     }
   }
 
-  @httpGet('/search') 
+  @httpGet('/search')
   async searchBooks(req: Request, res: Response) {
     try {
       const query: string = (req.query.q as string) || '';

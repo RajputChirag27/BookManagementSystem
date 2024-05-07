@@ -6,15 +6,10 @@ import { BookModel, CategoryModel, AuthorModel } from "../../models";
 
 @injectable()
 export class BookRepository {
-    async getBooks(page: number, limit: number): Promise<{ books: Book[], totalBooks: number }> {
+    async getBooks(): Promise<Book[] > {
         try {
             const books = await BookModel.find()
-                .skip((page - 1) * limit)
-                .limit(limit);
-            const totalBooks = await BookModel.countDocuments();
-            // const currentPage = Number(Math.ceil(totalBooks/limit));
-            // console.log(currentPage)
-            return { books, totalBooks };
+             return books;
         } catch (error) {
             throw new Error('Could not retrieve books');
         }

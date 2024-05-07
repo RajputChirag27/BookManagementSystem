@@ -1,18 +1,24 @@
 import { inject, injectable } from "inversify";
 import { BookRepository } from "../../repositories";
 import { Book } from "../../interfaces";
+import { PaginationService } from "../paginationService/paginationService";
+
 
 @injectable()
 class BookService {
 
-    constructor(@inject(BookRepository) private bookRepository: BookRepository) { }
+    constructor(@inject(BookRepository) private bookRepository: BookRepository, @inject(PaginationService) private paginationService : PaginationService) { }
 
     async createBook(bookData: Book) {
         return await this.bookRepository.createBook(bookData);
     }
 
-    async getBooks(page: number, limit: number): Promise<{ books: Book[], totalBooks: number}> {
-        return await this.bookRepository.getBooks(page, limit)
+    async getBooks(page: number, limit: number): Promise<{ paginatedData: Book[], entriesFound: number, page: number, totalPages: number}> {
+             const data = await this.bookRepository.getBooks();
+             const paginatedData = await this.paginationService.paginate(data,page,limit);
+             const totalPages = await this.paginationService.getTotalPages(data, limit);
+             const entriesFound = data.length;
+             return {paginatedData,entriesFound, page, totalPages};
     }
 
     async getBookById(id: string): Promise<Book> {

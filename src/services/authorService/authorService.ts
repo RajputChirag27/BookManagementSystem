@@ -1,12 +1,17 @@
 import { injectable,inject } from "inversify";
 import { AuthorRepository } from "../../repositories/authorRepository/authorRepository";
 import { Author } from "src/interfaces";
+import { PaginationService } from "../paginationService/paginationService";
 
 @injectable()
     export class AuthorService{
-        constructor(@inject(AuthorRepository) private authorRepository : AuthorRepository){}
-        public async getAuthors(){
-            return await this.authorRepository.getAuthors();
+        constructor(@inject(AuthorRepository) private authorRepository : AuthorRepository, @inject(PaginationService) private paginationService : PaginationService){}
+        public async getAuthors(page: number, limit: number){
+            const data = await this.authorRepository.getAuthors();
+            const paginatedData = await this.paginationService.paginate(data,page,limit);
+            const totalPages = await this.paginationService.getTotalPages(data, limit);
+            const entriesFound = data.length;
+            return {paginatedData,entriesFound, page, totalPages};
         }
 
         public async createAuthor(author : Author){

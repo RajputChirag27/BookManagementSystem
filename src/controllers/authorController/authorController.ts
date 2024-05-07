@@ -13,7 +13,9 @@ export class AuthorController {
     @httpGet('/getAuthors')
     public async getAuthors(@request() req: Request, @response() res: Response) {
         try {
-            const authors = await this.authorService.getAuthors();
+            const page: number = parseInt(req.query.page as string) || 1;
+            const limit: number = parseInt(req.query.limit as string) || 10;
+            const authors = await this.authorService.getAuthors(page, limit);
             res.send(authors)
         } catch (err) {
             res.status(500).json({ error: 'Internal Server Error', message: err });
