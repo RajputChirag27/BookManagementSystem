@@ -67,9 +67,14 @@ export class BookController {
   @httpGet('/filter') 
   async filterBooks(req: Request, res: Response) {
     try {
-      const query = req.query.query;
+      const query = req.query.query || '';
       const minPrice: number = parseFloat(req.query.minPrice as string) || 0;
       const maxPrice: number = parseFloat(req.query.maxPrice as string) || Number.POSITIVE_INFINITY;
+      if(query === ''){
+        const book = await this.bookService.filterBooksByPrice(minPrice,maxPrice);
+        res.send(book);
+        return;
+      }
       const books = await this.bookService.filterBooks(query,minPrice,maxPrice);
       res.status(200).json(books);
     } catch (error) {

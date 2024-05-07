@@ -71,23 +71,35 @@ export class BookRepository {
         }
     }
 
-    async filterBooks(query, minPrice: number, maxPrice: number): Promise<Book[]> {
+    async filterBooks(query?: string, minPrice?: number, maxPrice?: number): Promise<Book[]> {
         try {
             console.log('Query:', query);
-            const books = await BookModel.find({
-                $and: [
-                    {
-                        $or: [
-                            { title: query },
-                            { authorName: query },
-                            { categoryName: query },
-                            { publishedYear: Number(query) },
-                            { ISBN: query }
-                        ]
-                    },
-                    { price: { $gte: minPrice, $lte: maxPrice } }
-                ]
-            });
+            console.log('minPrice', minPrice);
+            console.log('maxPrice', maxPrice);
+    
+            // Define the conditions for filtering
+            const conditions: any[] = [
+                {
+                    $or: [
+                        { title: query },
+                        { authorName: query },
+                        { categoryName: query },
+                        { ISBN: query }
+                    ].filter(Boolean)
+                }
+            ];
+    
+            // Check if publishedYear exists and add it to conditions
+            if (!isNaN(Number(query))) { // Check if query can be converted to a number
+                conditions.push({ publishedYear: Number(query) });
+            }
+    
+            // Add price range condition
+            conditions.push({ price: { $gte: minPrice, $lte: maxPrice } });
+    
+            // Perform the query using $and operator with conditions
+            const books = await BookModel.find({ $and: conditions });
+    
             console.log('Filtered Books:', books);
             return books;
         } catch (error) {
@@ -95,5 +107,21 @@ export class BookRepository {
         }
     }
 
+    async filterBooksByPrice(minPrice: number, maxPrice: number): Promise<Book[]> {
+        try {
+            console.log('minPrice', minPrice);
+            console.log('maxPrice', maxPrice);
+    
+            // Query books based on price range
+            const books = await BookModel.find({ price: { $gte: minPrice, $lte: maxPrice } });
+    
+            console.log('Filtered Books:', books);
+            return books;
+        } catch (error) {
+            throw new Error('Could not filter books');
+        }
+    }
+    
+    
 
 }

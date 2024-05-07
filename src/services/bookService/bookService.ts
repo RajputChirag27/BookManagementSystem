@@ -31,13 +31,23 @@ class BookService {
         return await this.bookRepository.searchBooks(query)
     }
 
-    async filterBooks(query, minPrice: number, maxPrice : number): Promise<Book[]> {
+    async filterBooks(query?, minPrice?: number, maxPrice ?: number): Promise<Book[]> {
         try {
             return await this.bookRepository.filterBooks(query, minPrice, maxPrice);
         } catch (error) {
             throw new Error('Could not filter books');
         }
     }
+
+    async filterBooksByPrice( minPrice: number, maxPrice : number): Promise<Book[]> {
+        try {
+            return await this.bookRepository.filterBooksByPrice(minPrice, maxPrice);
+        } catch (error) {
+            throw new Error('Could not filter books');
+        }
+    }
+
+
 }
 
 export default BookService;
