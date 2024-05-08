@@ -3,6 +3,7 @@ import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { injectable } from 'inversify';
 import { AuthenticatedRequest } from '../../interfaces';
 import { BaseMiddleware } from 'inversify-express-utils';
+import { errorCodes } from '../../constants';
 
 // @injectable()
 export class JwtAuthenticationMiddleware extends BaseMiddleware {
@@ -10,7 +11,7 @@ export class JwtAuthenticationMiddleware extends BaseMiddleware {
         // Extract the JWT token from the Authorization header
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res.status(401).json({ error: 'Unauthorized' });
+            res.status(errorCodes.UNAUTHORIZED).json({ error: 'Unauthorized' });
             return;
         }
 
@@ -19,7 +20,7 @@ export class JwtAuthenticationMiddleware extends BaseMiddleware {
         // Verify the JWT token
         jwt.verify(token, process.env.JWT_SECRET_KEY as string, (err: VerifyErrors | null, decoded: any) => {
             if (err) {
-                res.status(401).json({ error: 'Unauthorized' });
+                res.status(errorCodes.UNAUTHORIZED).json({ error: 'Unauthorized' });
                 return;
             }
             // If token is valid, set decoded user data on request object

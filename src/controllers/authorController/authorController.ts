@@ -4,7 +4,8 @@ import { controller, httpGet, httpPost, httpDelete, httpPatch, request, response
 import { AuthorService } from "../../services/authorService/authorService";
 import { Author } from "../../interfaces";
 import { IsAdminMiddleware, JwtAuthenticationMiddleware, authenticateJwt } from "../../middlewares";
-import container from "../../inversifyConfig";
+import { errorCodes } from "../../constants";
+
 
 
 @controller('/author', JwtAuthenticationMiddleware, IsAdminMiddleware)
@@ -18,8 +19,9 @@ export class AuthorController {
             const limit: number = parseInt(req.query.limit as string) || 10;
             const authors = await this.authorService.getAuthors(page, limit);
             res.send(authors)
+         
         } catch (err) {
-            res.status(500).json({ error: 'Internal Server Error', message: err });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
         }
     }
 
@@ -30,7 +32,7 @@ export class AuthorController {
             const authors = await this.authorService.createAuthor(author);
             res.send(authors)
         } catch (err) {
-            res.status(500).json({ error: 'Internal Server Error', message: err });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
         }
     }
 
@@ -42,12 +44,12 @@ export class AuthorController {
             const author: Author = await this.authorService.updateAuthor(id, authors);
             console.log(author)
             if (!author) {
-                res.status(404).json({ error: 'Category not found' });
+                res.status(errorCodes.NOT_FOUND).json({ error: 'Category not found' });
                 return;
             }
             res.status(200).json(author);
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error', message: error });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: error });
         }
     }
 
@@ -58,12 +60,12 @@ export class AuthorController {
             const deleted = await this.authorService.deleteAuthor(categoryId);
             res.send({ deleted, message: "Deleted Successfully" })
             if (!deleted) {
-                res.status(404).json({ error: 'Category not found' });
+                res.status(errorCodes.NOT_FOUND).json({ error: 'Category not found' });
                 return;
             }
-            res.status(204).end();
+            res.status(errorCodes.NO_CONTENT).end();
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error' });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
         }
     }
 

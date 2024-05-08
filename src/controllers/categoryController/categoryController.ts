@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { inject } from 'inversify';
 import { controller, httpDelete, httpGet, httpPatch, httpPost, httpPut, request, response } from 'inversify-express-utils';
 import { CategoryService } from '../../services';
-import { Category } from 'src/interfaces';
+import { Category } from '../../interfaces';
+import { errorCodes } from '../../constants';
 
 @controller('/category')
 export class CategoryController {
@@ -14,9 +15,9 @@ export class CategoryController {
             const page: number = parseInt(req.query.page as string) || 1;
             const limit: number = parseInt(req.query.limit as string) || 10;
             const categories = await this.categoryService.getAllCategories(page, limit);
-            res.status(200).json(categories);
+            res.status(errorCodes.OK).json(categories);
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error', message: error });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: error });
         }
     }
 
@@ -26,12 +27,12 @@ export class CategoryController {
         try {
             const category = await this.categoryService.getCategoryById(categoryId);
             if (!category) {
-                res.status(404).json({ error: 'Category not found' });
+                res.status(errorCodes.NOT_FOUND).json({ error: 'Category not found' });
                 return;
             }
-            res.status(200).json(category);
+            res.status(errorCodes.OK).json(category);
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error', message: error.message });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: error.message });
         }
     }
 
@@ -40,9 +41,9 @@ export class CategoryController {
         const newCategory: Category = req.body;
         try {
             const category = await this.categoryService.createCategory(newCategory);
-            res.status(201).json(category);
+            res.status(errorCodes.CREATED).json(category);
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error', message: error.errorResponse.errmsg });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: error.errorResponse.errmsg });
         }
     }
 
@@ -55,12 +56,12 @@ export class CategoryController {
             const category: Category = await this.categoryService.updateCategory(id, name);
             console.log(category)
             if (!category) {
-                res.status(404).json({ error: 'Category not found' });
+                res.status(errorCodes.NOT_FOUND).json({ error: 'Category not found' });
                 return;
             }
-            res.status(200).json(category);
+            res.status(errorCodes.OK).json(category);
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error', message: error.errorResponse.errmsg });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: error.errorResponse.errmsg });
         }
     }
 
@@ -71,12 +72,12 @@ export class CategoryController {
             const deleted = await this.categoryService.deleteCategory(categoryId);
             res.send({ deleted, message: "Deleted Successfully" })
             if (!deleted) {
-                res.status(404).json({ error: 'Category not found' });
+                res.status(errorCodes.NOT_FOUND).json({ error: 'Category not found' });
                 return;
             }
-            res.status(204).end();
+            res.status(errorCodes.NO_CONTENT).end();
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error' });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
         }
     }
 
@@ -85,9 +86,9 @@ export class CategoryController {
         const keyword = req.body.search;
         try {
             const categories = await this.categoryService.searchCategories(keyword);
-            res.status(200).json(categories);
+            res.status(errorCodes.OK).json(categories);
         } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error', message: error });
+            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: error });
         }
     }
 }

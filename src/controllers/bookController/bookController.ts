@@ -4,6 +4,7 @@ import { controller, httpGet, httpPost, httpPut, httpDelete, httpPatch } from 'i
 import { BookService } from '../../services';
 import { Book } from '../../interfaces';
 import { JwtAuthenticationMiddleware } from '../../middlewares';
+import { errorCodes } from '../../constants';
 
 @controller('/books')
 export class BookController {
@@ -15,9 +16,9 @@ export class BookController {
     try {
       const bookData: Book = req.body;
       const book = await this.bookService.createBook(bookData);
-      res.status(201).json(book);
+      res.status(errorCodes.NO_CONTENT).json(book);
     } catch (error) {
-      res.status(500).json({ message: 'Could not create book', error: error.message });
+      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not create book', error: error.message });
     }
   }
 
@@ -27,9 +28,9 @@ export class BookController {
       const page: number = parseInt(req.query.page as string) || 1;
       const limit: number = parseInt(req.query.limit as string) || 10;
       const data = await this.bookService.getBooks(page, limit);
-      res.status(200).json(data);
+      res.status(errorCodes.OK).json(data);
     } catch (error) {
-      res.status(500).json({ message: 'Could not retrieve books', error: error.message });
+      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not retrieve books', error: error.message });
     }
   }
 
@@ -40,12 +41,12 @@ export class BookController {
       const bookData: Book = req.body;
       const updatedBook = await this.bookService.updateBook(id, bookData);
       if (!updatedBook) {
-        res.status(404).json({ message: 'Book not found' });
+        res.status(errorCodes.NOT_FOUND).json({ message: 'Book not found' });
       } else {
-        res.status(200).json(updatedBook);
+        res.status(errorCodes.OK).json(updatedBook);
       }
     } catch (error) {
-      res.status(500).json({ message: 'Could not update book', error: error.message });
+      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not update book', error: error.message });
     }
   }
 
@@ -55,12 +56,12 @@ export class BookController {
       const id: string = req.params.id;
       const deletedBook = await this.bookService.deleteBook(id);
       if (!deletedBook) {
-        res.status(404).json({ message: 'Book not found' });
+        res.status(errorCodes.NOT_FOUND).json({ message: 'Book not found' });
       } else {
-        res.status(200).json({ message: 'Book deleted successfully' });
+        res.status(errorCodes.OK).json({ message: 'Book deleted successfully' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Could not delete book', error: error.message });
+      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not delete book', error: error.message });
     }
   }
 
@@ -77,9 +78,9 @@ export class BookController {
         return;
       }
       const books = await this.bookService.filterBooks(query, minPrice, maxPrice);
-      res.status(200).json(books);
+      res.status(errorCodes.OK).json(books);
     } catch (error) {
-      res.status(500).json({ message: 'Could not filter books', error: error.message });
+      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not filter books', error: error.message });
     }
   }
 
@@ -88,9 +89,9 @@ export class BookController {
     try {
       const query: string = (req.query.q as string) || '';
       const books = await this.bookService.searchBooks(query);
-      res.status(200).json(books);
+      res.status(errorCodes.OK).json(books);
     } catch (error) {
-      res.status(500).json({ message: 'Could not search books', error: error.message });
+      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not search books', error: error.message });
     }
   }
 
@@ -100,12 +101,12 @@ export class BookController {
       const id: string = req.params.id;
       const book = await this.bookService.getBookById(id);
       if (!book) {
-        res.status(404).json({ message: 'Book not found' });
+        res.status(errorCodes.NOT_FOUND).json({ message: 'Book not found' });
       } else {
-        res.status(200).json(book);
+        res.status(errorCodes.OK).json(book);
       }
     } catch (error) {
-      res.status(500).json({ message: 'Could not retrieve book', error: error.message });
+      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not retrieve book', error: error.message });
     }
   }
 }
