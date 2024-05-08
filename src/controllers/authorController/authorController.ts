@@ -5,7 +5,7 @@ import { AuthorService } from "../../services/authorService/authorService";
 import { Author } from "../../interfaces";
 import { IsAdminMiddleware, JwtAuthenticationMiddleware, authenticateJwt } from "../../middlewares";
 import { errorCodes } from "../../constants";
-import { errorHandler } from "../../handler/errorHandler";
+import customErrorHandler  from "../../handler/errorHandler";
 
 
 
@@ -13,7 +13,7 @@ import { errorHandler } from "../../handler/errorHandler";
 export class AuthorController {
     constructor(@inject(AuthorService) private authorService: AuthorService) { }
 
-    @httpGet('/getAuthors',errorHandler)
+    @httpGet('/getAuthors')
     public async getAuthors(@request() req: Request, @response() res: Response, @next() next : NextFunction) {
         try {
             const page: number = parseInt(req.query.page as string) || 1;
@@ -27,7 +27,7 @@ export class AuthorController {
         }
     }
 
-    @httpPost('/createAuthor',)
+    @httpPost('/createAuthor')
     public async createAuthor(@request() req: Request, @response() res: Response, @next() next : NextFunction) {
         try {
             const author = req.body;
@@ -36,7 +36,7 @@ export class AuthorController {
         } catch (err) {
             // res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
             // next(err);
-            errorHandler(err,res);
+            customErrorHandler(err,req,res,next);
         }
     }
 

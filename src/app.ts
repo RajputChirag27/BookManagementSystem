@@ -14,7 +14,7 @@ const result = dotenv.config();
 // Set up mongoose connection
 
 import './config/dbConfig'
-import { errorHandler } from './handler/errorHandler';
+
 
 // console.log(process.env)
 
