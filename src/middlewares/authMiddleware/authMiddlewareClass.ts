@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { AuthenticatedRequest } from '../../interfaces';
 import { BaseMiddleware } from 'inversify-express-utils';
 
-@injectable()
+// @injectable()
 export class JwtAuthenticationMiddleware extends BaseMiddleware {
     handler(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
         // Extract the JWT token from the Authorization header
