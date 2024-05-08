@@ -4,9 +4,9 @@ import { controller, httpDelete, httpGet, httpPatch, httpPost, httpPut, request,
 import { CategoryService } from '../../services';
 import { Category } from '../../interfaces';
 import { errorCodes } from '../../constants';
-import { JwtAuthenticationMiddleware } from '../../middlewares';
+import { IsAdminMiddleware, JwtAuthenticationMiddleware } from '../../middlewares';
 
-@controller('/category')
+@controller('/category',JwtAuthenticationMiddleware,IsAdminMiddleware)
 export class CategoryController {
     constructor(@inject(CategoryService) private readonly categoryService: CategoryService) { }
 
