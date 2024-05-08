@@ -1,8 +1,8 @@
 import { Container } from 'inversify';
-import * as controller from './controllers'
-import * as repository from './repositories'
-import * as service from './services/index'
-import * as middleware from './middlewares/index'
+import * as controller from './controllers';
+import * as repository from './repositories';
+import * as service from './services/index';
+import * as middleware from './middlewares/index';
 
 
 const container = new Container();

@@ -1,19 +1,20 @@
 // app.ts
 import 'reflect-metadata'
 import express from 'express';
-import { InversifyExpressServer, cookies } from 'inversify-express-utils';
+import { InversifyExpressServer } from 'inversify-express-utils';
 import mongoose from 'mongoose';
 import  container  from './inversifyConfig';
-import swaggerUi from 'swagger-ui-express'
-import swaggerDocument from '../swagger.json'
-import cookieParser from 'cookie-parser'
-import session from 'express-session'
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../swagger.json';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import dotenv from 'dotenv';
-const result = dotenv.config()
+const result = dotenv.config();
 
 // Set up mongoose connection
 
 import './config/dbConfig'
+import { errorHandler } from './handler/errorHandler';
 
 // console.log(process.env)
 
@@ -23,6 +24,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
+
 
 
 app.use(session({

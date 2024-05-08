@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { inject } from "inversify";
-import { controller, httpGet, httpPost, httpDelete, httpPatch, request, response, Middleware } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, httpPatch, request, response, Middleware, next } from "inversify-express-utils";
 import { AuthorService } from "../../services/authorService/authorService";
 import { Author } from "../../interfaces";
 import { IsAdminMiddleware, JwtAuthenticationMiddleware, authenticateJwt } from "../../middlewares";
 import { errorCodes } from "../../constants";
+import { errorHandler } from "../../handler/errorHandler";
 
 
 
@@ -12,8 +13,8 @@ import { errorCodes } from "../../constants";
 export class AuthorController {
     constructor(@inject(AuthorService) private authorService: AuthorService) { }
 
-    @httpGet('/getAuthors')
-    public async getAuthors(@request() req: Request, @response() res: Response) {
+    @httpGet('/getAuthors',errorHandler)
+    public async getAuthors(@request() req: Request, @response() res: Response, @next() next : NextFunction) {
         try {
             const page: number = parseInt(req.query.page as string) || 1;
             const limit: number = parseInt(req.query.limit as string) || 10;
@@ -21,18 +22,21 @@ export class AuthorController {
             res.send(authors)
          
         } catch (err) {
-            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
+            // res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
+            next(err);
         }
     }
 
-    @httpPost('/createAuthor')
-    public async createAuthor(@request() req: Request, @response() res: Response) {
+    @httpPost('/createAuthor',)
+    public async createAuthor(@request() req: Request, @response() res: Response, @next() next : NextFunction) {
         try {
             const author = req.body;
             const authors = await this.authorService.createAuthor(author);
             res.send(authors)
         } catch (err) {
-            res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
+            // res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
+            // next(err);
+            errorHandler(err,res);
         }
     }
 
