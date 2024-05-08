@@ -12,7 +12,7 @@ for (const controllerName in controller) {
    const Controller = controller[controllerName];
    container.bind<typeof Controller>(Controller).toSelf();
 }
-container.bind<controller.AuthorController>(controller.AuthorController).toSelf();
+// container.bind<controller.AuthorController>(controller.AuthorController).toSelf();
 
 //  services
 for (const serviceName in service) {
