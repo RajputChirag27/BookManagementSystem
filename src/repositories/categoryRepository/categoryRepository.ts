@@ -54,7 +54,8 @@ export default class CategoryRepository {
     }
 
 
-    async getCategoryList(searchQuery, categoryName, sortField, sortOrder, pageNumber, pageSize) {
+  
+    async getCategoryList(searchQuery: string, categoryName: string, sortField: string, sortOrder: string, pageNumber: number, pageSize: number) {
         const pipeline = [];
     
         // Match stage for search query
@@ -82,31 +83,20 @@ export default class CategoryRepository {
             pipeline.push({ $sort: sortStage });
         }
     
+        // Aggregation to count total filtered documents
+        const countPipeline = [...pipeline, { $count: 'totalResults' }];
+        const [{ totalResults }] = await CategoryModel.aggregate(countPipeline);
+    
+        // Calculate total pages
+        const totalPages = Math.ceil(totalResults / pageSize);
+    
         // Pagination stages
         const skip = (pageNumber - 1) * pageSize;
         pipeline.push({ $skip: skip });
         pipeline.push({ $limit: pageSize });
     
-        // Aggregation to count total filtered documents
-        pipeline.push({
-            $group: {
-                _id: null,
-                totalResults: { $sum: 1 }
-            }
-        });
-    
-        // Execute aggregation pipeline
-        const results = await CategoryModel.aggregate(pipeline);
-    
-        // Extract total results count
-        const totalResults = results.length > 0 ? results[0].totalResults : 0;
-    
         // Execute aggregation pipeline to retrieve paginated data
-        pipeline.pop(); // Remove the $group stage for totalResults
         const categoryList = await CategoryModel.aggregate(pipeline);
-    
-        // Calculate total pages
-        const totalPages = Math.ceil(totalResults / pageSize);
     
         return {
             categoryList,
@@ -116,7 +106,6 @@ export default class CategoryRepository {
             currentPage: pageNumber
         };
     }
-    
 
 
 
