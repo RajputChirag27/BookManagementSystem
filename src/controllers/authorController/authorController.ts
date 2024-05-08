@@ -23,7 +23,7 @@ export class AuthorController {
          
         } catch (err) {
             // res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
-            next(err);
+           customErrorHandler(err,req,res,next);
         }
     }
 

@@ -4,10 +4,40 @@ import { controller, httpDelete, httpGet, httpPatch, httpPost, httpPut, request,
 import { CategoryService } from '../../services';
 import { Category } from '../../interfaces';
 import { errorCodes } from '../../constants';
+import { JwtAuthenticationMiddleware } from '../../middlewares';
 
 @controller('/category')
 export class CategoryController {
     constructor(@inject(CategoryService) private readonly categoryService: CategoryService) { }
+
+    @httpGet('/')
+    async getCategoryList(req: Request, res: Response): Promise<Response> {
+        try {
+            const { searchQuery, categoryName, sortField, sortOrder, pageNumber, pageSize } = req.query;
+
+            // Provide default values for missing parameters
+            const searchQueryOrDefault: string = searchQuery ? String(searchQuery) : ''; // Default search query
+            const categoryNameOrDefault: string = categoryName ? String(categoryName) : ''; // Default category name
+            const sortFieldOrDefault: string = sortField ? String(sortField) : 'name'; // Default sort field
+            const sortOrderOrDefault: string = sortOrder ? String(sortOrder) : 'asc'; // Default sort order
+            const pageNumberOrDefault: number = pageNumber ? parseInt(String(pageNumber), 10) : 1; // Default page number
+            const pageSizeOrDefault: number = pageSize ? parseInt(String(pageSize), 10) : 10; // Default page size
+
+            // Call the service method with provided or default values
+            const result = await this.categoryService.getCategoryList(
+                searchQueryOrDefault,
+                categoryNameOrDefault,
+                sortFieldOrDefault,
+                sortOrderOrDefault,
+                pageNumberOrDefault,
+                pageSizeOrDefault
+            );
+
+            return res.json(result);
+        } catch (error) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
 
     @httpGet('/getAllCategories')
     async getAllCategories(req: Request, res: Response): Promise<void> {
