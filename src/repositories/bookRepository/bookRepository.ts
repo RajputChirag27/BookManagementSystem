@@ -68,9 +68,9 @@ export class BookRepository {
 
     async filterBooks(query?: string, minPrice?: number, maxPrice?: number): Promise<Book[]> {
         try {
-            console.log('Query:', query);
-            console.log('minPrice', minPrice);
-            console.log('maxPrice', maxPrice);
+            // console.log('Query:', query);
+            // console.log('minPrice', minPrice);
+            // console.log('maxPrice', maxPrice);
     
             // Define the conditions for filtering
             const conditions: any[] = [
