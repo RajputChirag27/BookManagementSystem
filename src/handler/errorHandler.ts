@@ -4,34 +4,53 @@ import { errorCodes } from '../constants';
 
 const customErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     try {
-        if (err.code == 11000) {
-            err = new CustomError("Duplicate Field Value Enter ", errorCodes.NOT_FOUND);
+        let errorMessage = '';
+        let statusCode = 500;
+
+        switch (err.name) {
+            case 'MongoError':
+                if (err.code === 11000) {
+                    errorMessage = "Duplicate Field Value Entered";
+                    statusCode = errorCodes.NOT_FOUND;
+                }
+                break;
+
+            case 'SyntaxError':
+                errorMessage = 'Unexpected Syntax';
+                statusCode = errorCodes.BAD_REQUEST;
+                break;
+
+            case 'ValidationError':
+                errorMessage = err.message;
+                statusCode = errorCodes.BAD_REQUEST;
+                break;
+
+            case 'CastError':
+                errorMessage = "Please provide a valid ID";
+                statusCode = errorCodes.BAD_REQUEST;
+                break;
+
+            case 'TokenExpiredError':
+                errorMessage = "JWT expired";
+                statusCode = errorCodes.UNAUTHORIZED;
+                break;
+
+            case 'JsonWebTokenError':
+                errorMessage = "JWT malformed";
+                statusCode = errorCodes.UNAUTHORIZED;
+                break;
+
+            default:
+                errorMessage = "Server Error";
+                break;
         }
 
-        if (err.name === 'SyntaxError') {
-            err = new CustomError('Unexpected Sytax ', errorCodes.BAD_REQUEST);
-        }
-        if (err.name === 'ValidationError') {
-            err = new CustomError(err.message, errorCodes.BAD_REQUEST);
-        }
+        console.log("Custom Error Handler => ", err.name, errorMessage, statusCode);
 
-        if (err.name === "CastError") {
-            err = new CustomError("Please provide a valid id  ", errorCodes.BAD_REQUEST);
-        }
-        if (err.name === "TokenExpiredError") {
-            err = new CustomError("Jwt expired  ", errorCodes.UNAUTHORIZED);
-        }
-        if (err.name === "JsonWebTokenError") {
-            err = new CustomError("Jwt malformed  ", errorCodes.UNAUTHORIZED);
-        }
-
-        console.log("Custom Error Handler => ", err.name, err.message, err.statusCode);
-
-        // Check if res object is defined before accessing its properties
         if (res) {
-            return res.status(err.statusCode || 500).json({
+            return res.status(statusCode).json({
                 success: false,
-                error: err.message || "Server Error"
+                error: errorMessage
             });
         } else {
             throw new Error('Response object is not defined');

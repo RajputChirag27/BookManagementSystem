@@ -1,16 +1,14 @@
-import { BaseHttpController, controller, httpGet, httpPost } from "inversify-express-utils";
+import {  controller, httpGet, httpPost } from "inversify-express-utils";
 import { NextFunction, Request, Response } from "express";
 import UserService from "../../services/userService/userService";
 import { inject } from "inversify";
 import { User } from "../../interfaces/index";
 import dotenv from 'dotenv'
-import * as express from 'express';
 dotenv.config();
 
 import { AuthenticatedRequest } from "../../interfaces";
-import { authenticateJwt } from "../../middlewares";
 import { JwtAuthenticationMiddleware } from "../../middlewares";
-import container from "../../inversifyConfig";
+
 
 
 @controller('/users')
@@ -29,8 +27,7 @@ export class UserController {
             const newUser = await this.userService.signup(user);
             res.status(201).json(newUser);
         } catch (error) {
-            console.error('Error in signup:', error);
-            res.status(500).json({ error: 'Internal server error', message: error });
+            
         }
     }
 
@@ -42,7 +39,10 @@ export class UserController {
             const userFromDb = await this.userService.login(user);
             // console.log(userFromDb)
             if (userFromDb) {
+                user.role = userFromDb.role;
+                console.log(user);
                 const payload = user;
+                console.log(user);
                 // Create a token
                 const token = await this.userService.createToken(payload)
                 console.log(token);

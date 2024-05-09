@@ -6,6 +6,8 @@ import { AuthorModel } from "../../models";
 export class AuthorRepository {
 
     public async getAuthors(): Promise<Author[]> {
+        const pipeline = [];
+
         return await AuthorModel.find();
     }
     public async createAuthor(author: Author): Promise<Author> {

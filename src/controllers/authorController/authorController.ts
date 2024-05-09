@@ -2,19 +2,19 @@ import { NextFunction, Request, Response } from "express";
 import { inject } from "inversify";
 import { controller, httpGet, httpPost, httpDelete, httpPatch, request, response, Middleware, next } from "inversify-express-utils";
 import { AuthorService } from "../../services/authorService/authorService";
-import { Author } from "../../interfaces";
+import { AuthenticatedRequest, Author } from "../../interfaces";
 import { IsAdminMiddleware, JwtAuthenticationMiddleware, authenticateJwt } from "../../middlewares";
 import { errorCodes } from "../../constants";
 import customErrorHandler  from "../../handler/errorHandler";
 
 
 
-@controller('/author', JwtAuthenticationMiddleware, IsAdminMiddleware)
+@controller('/author', JwtAuthenticationMiddleware)
 export class AuthorController {
     constructor(@inject(AuthorService) private authorService: AuthorService) { }
 
     @httpGet('/getAuthors')
-    public async getAuthors(@request() req: Request, @response() res: Response, @next() next : NextFunction) {
+    public async getAuthors(@request() req: AuthenticatedRequest, @response() res: Response, @next() next : NextFunction) {
         try {
             const page: number = parseInt(req.query.page as string) || 1;
             const limit: number = parseInt(req.query.limit as string) || 10;
@@ -27,8 +27,8 @@ export class AuthorController {
         }
     }
 
-    @httpPost('/createAuthor')
-    public async createAuthor(@request() req: Request, @response() res: Response, @next() next : NextFunction) {
+    @httpPost('/createAuthor', IsAdminMiddleware)
+    public async createAuthor(@request() req: AuthenticatedRequest, @response() res: Response, @next() next : NextFunction) {
         try {
             const author = req.body;
             const authors = await this.authorService.createAuthor(author);
@@ -41,7 +41,7 @@ export class AuthorController {
     }
 
     @httpPatch('/updateAuthor/:id')
-    async updateAuthor(req: Request, res: Response): Promise<void> {
+    async updateAuthor(req: AuthenticatedRequest, res: Response): Promise<void> {
         const id = req.params.id;
         const authors = req.body;
         try {
@@ -58,7 +58,7 @@ export class AuthorController {
     }
 
     @httpDelete('/deleteAuthor/:id')
-    async deleteAuthor(req: Request, res: Response): Promise<void> {
+    async deleteAuthor(req: AuthenticatedRequest, res: Response): Promise<void> {
         const categoryId = req.params.id;
         try {
             const deleted = await this.authorService.deleteAuthor(categoryId);

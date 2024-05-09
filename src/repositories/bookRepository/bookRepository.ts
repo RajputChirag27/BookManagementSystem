@@ -22,8 +22,9 @@ export class BookRepository {
             console.log(category, author)
             bookData.categoryName = category.name;
             bookData.authorName = author.name;
-            const book = new BookModel(bookData);
-            return await book.save();
+            console.log(bookData);
+            const book = await BookModel.create(bookData);
+            return book;
         } catch (error) {
             throw new Error('Could not create book');
         }

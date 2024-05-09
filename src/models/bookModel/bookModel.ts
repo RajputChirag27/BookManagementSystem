@@ -1,13 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { Book } from "../../interfaces";
 import { Types } from "mongoose";
 
 
-const bookSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
+const bookSchema: Schema<Book> = new mongoose.Schema({
+    title: { type: String, required: true, unique: true},
     author: {
         type: Types.ObjectId,
         required: true

@@ -9,7 +9,7 @@ class BookService {
 
     constructor(@inject(BookRepository) private bookRepository: BookRepository, @inject(PaginationService) private paginationService : PaginationService) { }
 
-    async createBook(bookData: Book) {
+    async createBook(bookData: Book) : Promise<Book> {
         return await this.bookRepository.createBook(bookData);
     }
 

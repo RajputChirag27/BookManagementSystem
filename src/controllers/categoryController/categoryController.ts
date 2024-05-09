@@ -16,21 +16,15 @@ export class CategoryController {
             const { searchQuery, categoryName, sortField, sortOrder, pageNumber, pageSize } = req.query;
 
             // Provide default values for missing parameters
-            const searchQueryOrDefault: string = searchQuery ? String(searchQuery) : ''; // Default search query
-            const categoryNameOrDefault: string = categoryName ? String(categoryName) : ''; // Default category name
-            const sortFieldOrDefault: string = sortField ? String(sortField) : 'name'; // Default sort field
-            const sortOrderOrDefault: string = sortOrder ? String(sortOrder) : 'asc'; // Default sort order
-            const pageNumberOrDefault: number = pageNumber ? parseInt(String(pageNumber), 10) : 1; // Default page number
-            const pageSizeOrDefault: number = pageSize ? parseInt(String(pageSize), 10) : 10; // Default page size
 
             // Call the service method with provided or default values
             const result = await this.categoryService.getCategoryList(
-                searchQueryOrDefault,
-                categoryNameOrDefault,
-                sortFieldOrDefault,
-                sortOrderOrDefault,
-                pageNumberOrDefault,
-                pageSizeOrDefault
+                searchQuery,
+                categoryName,
+                sortField,
+                sortOrder,
+                pageNumber,
+                pageSize
             );
 
             return res.json(result);

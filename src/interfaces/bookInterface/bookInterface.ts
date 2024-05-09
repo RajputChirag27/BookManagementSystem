@@ -1,9 +1,9 @@
-import { Document } from "mongoose";
+import { Document, Schema, Types } from "mongoose";
 
 interface Book extends Document {
     title: string;
-    author: string;
-    category: string;
+    author: Schema.Types.ObjectId;
+    category: Schema.Types.ObjectId;
     ISBN?: string;
     description?: string;
     publishedYear?: number;
