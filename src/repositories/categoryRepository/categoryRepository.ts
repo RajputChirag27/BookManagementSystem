@@ -11,6 +11,7 @@ export default class CategoryRepository {
             throw (err);
         }
     }
+   
     async getCategoryById(id: string): Promise<Category> {
         try {
             return await CategoryModel.findOne({ _id: id });
@@ -51,4 +52,61 @@ export default class CategoryRepository {
             throw (err);
         }
     }
+
+
+  
+    async getCategoryList(searchQuery: string, categoryName: string, sortField: string, sortOrder: string, pageNumber: number, pageSize: number) {
+        const pipeline = [];
+    
+        // Match stage for search query
+        if (searchQuery) {
+            pipeline.push({
+                $match: {
+                    name: { $regex: searchQuery, $options: 'i' } // Case-insensitive search
+                }
+            });
+        }
+    
+        // Match stage for filtering by categoryName
+        if (categoryName) {
+            pipeline.push({
+                $match: {
+                    name: categoryName,
+                }
+            });
+        }
+    
+        // Sort stage
+        if (sortField && sortOrder) {
+            const sortStage = {};
+            sortStage[sortField] = sortOrder === 'asc' ? 1 : -1;
+            pipeline.push({ $sort: sortStage });
+        }
+    
+        // Aggregation to count total filtered documents
+        const countPipeline = [...pipeline, { $count: 'totalResults' }];
+        const [{ totalResults }] = await CategoryModel.aggregate(countPipeline);
+    
+        // Calculate total pages
+        const totalPages = Math.ceil(totalResults / pageSize);
+    
+        // Pagination stages
+        const skip = (pageNumber - 1) * pageSize;
+        pipeline.push({ $skip: skip });
+        pipeline.push({ $limit: pageSize });
+    
+        // Execute aggregation pipeline to retrieve paginated data
+        const categoryList = await CategoryModel.aggregate(pipeline);
+    
+        return {
+            categoryList,
+            totalResults,
+            totalPages,
+            filteredPages: Math.ceil(categoryList.length / pageSize),
+            currentPage: pageNumber
+        };
+    }
+
+
+
 }

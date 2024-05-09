@@ -14,6 +14,14 @@ export default class CategoryService {
         const entriesFound = data.length;
         return { pagination,entriesFound, page, totalPages }
     }
+
+    async getCategoryList(searchQuery, categoryName, sortField, sortOrder, pageNumber, pageSize) {
+        const data = await this.categoryRepository.getCategoryList(searchQuery, categoryName, sortField, sortOrder,pageNumber,pageSize);
+        return data;
+    }
+
+
+    
     async getCategoryById(id: string): Promise<Category> {
         return await this.categoryRepository.getCategoryById(id);
     }
