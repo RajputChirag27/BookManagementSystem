@@ -2,6 +2,7 @@ import { injectable } from "inversify";
 import { Author } from "../../interfaces";
 import { AuthorModel } from "../../models";
 import { errorCodes } from "../../constants";
+import { errorMessages } from "../../constants/message";
 
 
 @injectable()
@@ -10,7 +11,7 @@ export class AuthorRepository {
     public async getAuthors(queries) {
         try {
             let queryObject = { ...queries };
-            console.log(queryObject)
+         
             // Basic Filtaration 
             const excludeFields = ['page', 'sort', 'limit', 'fields'];
             excludeFields.forEach(item => delete queryObject[item]);
@@ -20,16 +21,18 @@ export class AuthorRepository {
             let queryString = JSON.stringify(queryObject)
 
             queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-            console.log("queryString", queryString)
 
             queryObject = JSON.parse(queryString);
 
         
 
-            // Search on the basis of the title
+            // Search on the basis of the name of the Author
 
             if (queryObject.name) {
                 queryObject.name = new RegExp(queryObject.name, 'i');
+            } 
+            if(queryObject.nationality){
+                queryObject.nationality = new RegExp(queryObject.nationality, 'i');
             }
 
          
@@ -68,7 +71,7 @@ export class AuthorRepository {
             if (queries.page) {
                 numOfRecords = await AuthorModel.countDocuments({ ...queryObject });
                 if (skip > numOfRecords) {
-                    throw Object.assign(new Error("Page does not exists!"), { statusCode: errorCodes.NOT_FOUND });
+                    throw Object.assign(new Error(errorMessages[404]), { statusCode: errorCodes.NOT_FOUND });
                 }
             }
             const authors = await query;

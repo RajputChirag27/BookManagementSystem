@@ -5,7 +5,7 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 import mongoose from 'mongoose';
 import  container  from './inversifyConfig';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../swagger.json';
+import swaggerDocument from '../swagger.json'
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import dotenv from 'dotenv';

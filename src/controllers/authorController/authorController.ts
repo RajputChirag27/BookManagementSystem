@@ -17,15 +17,9 @@ export class AuthorController {
     public async getAuthors(@request() req: AuthenticatedRequest, @response() res: Response, @next() next : NextFunction) {
         try {
             const queryObject = {...req.query}
-            // console.log(queryObject)
             const result = await this.authorService.getAuthors(queryObject);
-            // const page: number = parseInt(req.query.page as string) || 1;
-            // const limit: number = parseInt(req.query.limit as string) || 10;
-            // const authors = await this.authorService.getAuthors(page, limit);
-            // res.send(authors)
             res.status(result.statusCode).json(result.data);
         } catch (err) {
-            // res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
            customErrorHandler(err,req,res,next);
         }
     }
@@ -37,8 +31,6 @@ export class AuthorController {
             const authors = await this.authorService.createAuthor(author);
             res.send(authors)
         } catch (err) {
-            // res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
-            // next(err);
             customErrorHandler(err,req,res,next);
         }
     }
