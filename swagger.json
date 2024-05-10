@@ -743,7 +743,101 @@
               "type": "http",
               "scheme": "bearer"
           }
-      }
+        },
+          "schemas": {
+            "User": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": ["user", "admin", "author"],
+                  "default": "user"
+                }
+              },
+              "required": ["username", "email", "password"]
+            }  ,
+            "Category": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": ["name"]
+            },
+            "Book": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "ISBN": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "publishedYear": {
+                  "type": "integer"
+                },
+                "authorName": {
+                  "type": "string"
+                },
+                "categoryName": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                }
+              },
+              "required": ["title", "author", "category", "ISBN", "price"]
+            },
+            "Author": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "biography": {
+                  "type": "string"
+                },
+                "nationality": {
+                  "type": "string"
+                },
+                "age": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "books": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["name", "email", "biography", "nationality", "age"]
+            }
+          }
   },
   "tags": [
       {
