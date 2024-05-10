@@ -6,12 +6,12 @@ import { PaginationService } from "../paginationService/paginationService";
 @injectable()
     export class AuthorService{
         constructor(@inject(AuthorRepository) private authorRepository : AuthorRepository, @inject(PaginationService) private paginationService : PaginationService){}
-        public async getAuthors(page: number, limit: number){
-            const data = await this.authorRepository.getAuthors();
-            const paginatedData = await this.paginationService.paginate(data,page,limit);
-            const totalPages = await this.paginationService.getTotalPages(data, limit);
-            const entriesFound = data.length;
-            return {paginatedData,entriesFound, page, totalPages};
+        public async getAuthors(query){
+            // console.log(query)
+            const data = await this.authorRepository.getAuthors(query);
+            return data;
+
+            
         }
 
         public async createAuthor(author : Author){

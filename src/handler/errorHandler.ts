@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import CustomError from '../helpers/customError';
 import { errorCodes } from '../constants';
 
+
 const customErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     try {
         let errorMessage = '';

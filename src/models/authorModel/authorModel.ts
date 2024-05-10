@@ -6,6 +6,7 @@ const AuthorSchema = new Schema<Author>({
     email: {type: String, required: true, unique: true},
     biography: { type: String, required: true },
     nationality: { type: String, required: true },
+    age : [{type: Number, required: true}],
     books: [{ type: Schema.Types.ObjectId, ref: 'Book' }] // Assuming 'Book' is the model name for books
 });
 

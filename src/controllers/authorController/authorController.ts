@@ -16,11 +16,14 @@ export class AuthorController {
     @httpGet('/getAuthors')
     public async getAuthors(@request() req: AuthenticatedRequest, @response() res: Response, @next() next : NextFunction) {
         try {
-            const page: number = parseInt(req.query.page as string) || 1;
-            const limit: number = parseInt(req.query.limit as string) || 10;
-            const authors = await this.authorService.getAuthors(page, limit);
-            res.send(authors)
-         
+            const queryObject = {...req.query}
+            // console.log(queryObject)
+            const result = await this.authorService.getAuthors(queryObject);
+            // const page: number = parseInt(req.query.page as string) || 1;
+            // const limit: number = parseInt(req.query.limit as string) || 10;
+            // const authors = await this.authorService.getAuthors(page, limit);
+            // res.send(authors)
+            res.status(result.statusCode).json(result.data);
         } catch (err) {
             // res.status(errorCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error', message: err });
            customErrorHandler(err,req,res,next);

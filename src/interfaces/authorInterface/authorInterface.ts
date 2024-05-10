@@ -5,5 +5,6 @@ export default interface Author extends Document{
     email : string,
     biography : string,
     nationality : string,
+    age : number,
     books : string[]
 }
