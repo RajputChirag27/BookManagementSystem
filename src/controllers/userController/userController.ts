@@ -40,12 +40,11 @@ export class UserController {
             // console.log(userFromDb)
             if (userFromDb) {
                 user.role = userFromDb.role;
-                console.log(user);
+                // console.log(user);
                 const payload = user;
-                console.log(user);
                 // Create a token
                 const token = await this.userService.createToken(payload)
-                console.log(token);
+                // console.log(token)
                 res.send({ userFromDb, token });
             } else {
                 res.send("User not found");

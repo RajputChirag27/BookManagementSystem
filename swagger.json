@@ -60,7 +60,7 @@
               },
               "responses": {
                   "200": {
-                      "description": ""
+                      "description": "Ok Signed Up succesfully"
                   }
               }
           }
@@ -104,12 +104,7 @@
                   "200": {
                       "description": ""
                   }
-              },
-              "security": [
-                  {
-                      "bearerAuth": []
-                  }
-              ]
+              }
           }
       },
       "/api/users/protected": {

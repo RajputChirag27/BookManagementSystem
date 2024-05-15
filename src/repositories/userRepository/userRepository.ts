@@ -32,8 +32,7 @@ import jwt from 'jsonwebtoken'
         
     async createToken(payload : object) : Promise<string>{
         const secretKey = process.env.JWT_SECRET_KEY;
-        console.log(payload)
-        const token : string = jwt.sign(payload, secretKey, {expiresIn : '1h'});
+        const token : string = await jwt.sign(payload, secretKey, {expiresIn : '1h'});
         return token;
     }
     }
