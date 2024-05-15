@@ -1,10 +1,9 @@
-import { Document } from "mongoose";
-
+import { Document } from 'mongoose'
 
 // Define interface for User
 export interface User extends Document {
-    username: string;
-    email: string;
-    password: string;
-    role: 'user' | 'admin'  | 'author'; // Enum for better role management
+  username: string
+  email: string
+  password: string
+  role: 'user' | 'admin' | 'author' // Enum for better role management
 }

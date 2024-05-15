@@ -1,3 +1,4 @@
-import { errorCodes } from "./errorCode";
+import { errorCodes } from './errorCode'
+import { errorMessages } from './message'
 
-export {errorCodes};
+export { errorCodes, errorMessages }

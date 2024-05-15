@@ -1,28 +1,29 @@
-import { CategoryService } from "src/services";
-import { AuthorController, CategoryController, UserController } from "../controllers";
+import { CategoryService } from 'src/services'
+import {
+  AuthorController,
+  CategoryController,
+  UserController
+} from '../controllers'
 
 const TYPES = {
-    // Controllers
-    UserController: Symbol.for("UserController"),
-    CategoryController: Symbol.for("CategoryController"),
-    AuthorController: Symbol.for("AuthorController"),
+  // Controllers
+  UserController: Symbol.for('UserController'),
+  CategoryController: Symbol.for('CategoryController'),
+  AuthorController: Symbol.for('AuthorController'),
 
-    // Services
-    UserService: Symbol.for("UserService"),
-    CategoryService:  Symbol.for("CategoryService"),
-    
-    // Middlewares
-    AuthMiddleware: Symbol.for("AuthMiddleware"),
+  // Services
+  UserService: Symbol.for('UserService'),
+  CategoryService: Symbol.for('CategoryService'),
 
-    // Validators
-    UserValidator: Symbol.for("UserValidator"),
-    CategoryValidator: Symbol.for("CategoryValidator"),
+  // Middlewares
+  AuthMiddleware: Symbol.for('AuthMiddleware'),
 
-    // Repositories
-    UserRepository: Symbol.for("UserRepository"),
+  // Validators
+  UserValidator: Symbol.for('UserValidator'),
+  CategoryValidator: Symbol.for('CategoryValidator'),
 
-
-
+  // Repositories
+  UserRepository: Symbol.for('UserRepository')
 }
 
-export {TYPES};
+export { TYPES }
