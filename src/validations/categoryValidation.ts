@@ -10,4 +10,3 @@ const categoryValidationSchema = yup.object().shape({
 })
 
 export default categoryValidationSchema
-    
