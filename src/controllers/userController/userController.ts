@@ -4,14 +4,13 @@ import UserService from '../../services/userService/userService'
 import { inject } from 'inversify'
 import { User } from '../../interfaces/index'
 import dotenv from 'dotenv'
-import customErrorHandler from '../../handler/errorHandler'
-dotenv.config()
-
+import { customErrorHandler } from '../../handler'
 import { AuthenticatedRequest } from '../../interfaces'
 import {
   JwtAuthenticationMiddleware,
   ValidatorMiddleWare
 } from '../../middlewares'
+dotenv.config()
 
 @controller('/users')
 export class UserController {

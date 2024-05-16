@@ -4,6 +4,7 @@ import { AuthenticatedRequest, User } from '../../interfaces'
 import { UserModel } from '../../models'
 import { BaseMiddleware } from 'inversify-express-utils'
 import { errorCodes } from '../../constants'
+import { customErrorHandler } from '../../handler'
 
 @injectable()
 export class IsAdminMiddleware extends BaseMiddleware {
@@ -17,15 +18,15 @@ export class IsAdminMiddleware extends BaseMiddleware {
       const user = req.user
       console.log(user)
       if (!user || user.role !== 'admin') {
-        res
-          .status(errorCodes.FORBIDDEN)
-          .send('Not Permitted because you are not an Admin')
+        const err = {
+          name: 'ForbiddenError'
+        }
+        customErrorHandler(err, req, res, next)
       } else {
         next()
       }
     } catch (error) {
-      console.error('Error in isAdmin middleware:', error)
-      res.status(errorCodes.INTERNAL_SERVER_ERROR).send('Internal Server Error')
+      customErrorHandler(error, req, res, next)
     }
   }
 }

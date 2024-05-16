@@ -19,7 +19,7 @@ import {
   JwtAuthenticationMiddleware,
   ValidatorMiddleWare
 } from '../../middlewares'
-import customErrorHandler from '../../handler/errorHandler'
+import { customErrorHandler } from '../../handler'
 
 @controller('/category', JwtAuthenticationMiddleware, IsAdminMiddleware)
 export class CategoryController {

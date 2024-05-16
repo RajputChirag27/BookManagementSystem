@@ -15,7 +15,7 @@ import {
   JwtAuthenticationMiddleware
 } from '../../middlewares'
 import { errorCodes } from '../../constants'
-import customErrorHandler from '../../handler/errorHandler'
+import { customErrorHandler } from '../../handler'
 
 @controller('/books')
 export class BookController {

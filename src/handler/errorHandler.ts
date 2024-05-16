@@ -55,6 +55,11 @@ const customErrorHandler = (
         statusCode = errorCodes.UNAUTHORIZED
         break
 
+      case 'ForbiddenError':
+        ;(errorMessage = "Not permitted Because you aren't admin "),
+          (statusCode = errorCodes.FORBIDDEN)
+        break
+
       default:
         errorMessage = 'Server Error'
         break

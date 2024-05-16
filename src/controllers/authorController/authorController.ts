@@ -19,7 +19,7 @@ import {
   ValidatorMiddleWare
 } from '../../middlewares'
 import { errorCodes } from '../../constants'
-import customErrorHandler from '../../handler/errorHandler'
+import { customErrorHandler } from '../../handler'
 
 @controller('/author', JwtAuthenticationMiddleware)
 export class AuthorController {

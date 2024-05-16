@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import jwt, { VerifyErrors } from 'jsonwebtoken'
 import { AuthenticatedRequest } from '../../interfaces'
 import { BaseMiddleware } from 'inversify-express-utils'
-import { errorCodes } from '../../constants'
-import customErrorHandler from '../../handler/errorHandler'
+
+import { customErrorHandler } from '../../handler'
 
 export class JwtAuthenticationMiddleware extends BaseMiddleware {
   handler(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
