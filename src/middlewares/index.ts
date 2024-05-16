@@ -1,7 +1,10 @@
-import { authenticateJwt } from './authMiddleware/authMiddleware'
-import { JwtAuthenticationMiddleware } from './authMiddleware/authMiddlewareClass'
-import { IsAdminMiddleware } from './isAdmin/isAdmin'
+export { authenticateJwt } from './authMiddleware/authMiddleware'
+export { JwtAuthenticationMiddleware } from './authMiddleware/authMiddlewareClass'
+export { IsAdminMiddleware } from './isAdmin/isAdmin'
+export { ValidatorMiddleWare } from './validator'
 
-export { IsAdminMiddleware }
-export { JwtAuthenticationMiddleware }
-export { authenticateJwt }
+
+
+
+
+

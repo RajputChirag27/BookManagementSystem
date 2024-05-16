@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import CustomError from '../helpers/customError'
 import { errorCodes } from '../constants'
+import * as yup from 'yup'
 
 const customErrorHandler = (
   err: any,
@@ -26,8 +27,12 @@ const customErrorHandler = (
         break
 
       case 'ValidationError':
-        errorMessage = err.message
-        statusCode = errorCodes.BAD_REQUEST
+        if (err instanceof yup.ValidationError) {
+          errorMessage = err.errors.join(', '); // Extracting the error messages
+        } else {
+          errorMessage = 'Validation Error';
+        }
+        statusCode = errorCodes.BAD_REQUEST;
         break
 
       case 'CastError':

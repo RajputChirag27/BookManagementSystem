@@ -16,6 +16,7 @@ import { AuthenticatedRequest, Author } from '../../interfaces'
 import {
   IsAdminMiddleware,
   JwtAuthenticationMiddleware,
+  ValidatorMiddleWare,
   authenticateJwt
 } from '../../middlewares'
 import { errorCodes } from '../../constants'
@@ -40,7 +41,7 @@ export class AuthorController {
     }
   }
 
-  @httpPost('/createAuthor', IsAdminMiddleware)
+  @httpPost('/createAuthor', IsAdminMiddleware, ValidatorMiddleWare)
   public async createAuthor(
     @request() req: AuthenticatedRequest,
     @response() res: Response,

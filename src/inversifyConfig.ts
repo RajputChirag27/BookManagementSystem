@@ -2,7 +2,8 @@ import { Container } from 'inversify'
 import * as controller from './controllers'
 import * as repository from './repositories'
 import * as service from './services/index'
-import * as middleware from './middlewares/index'
+import * as middleware from './middlewares'
+import * as validator from './validations'
 
 const container = new Container()
 
@@ -25,10 +26,17 @@ for (const middlewareName in middleware) {
   container.bind<typeof Middleware>(Middleware).toSelf()
 }
 
+// container.bind<middleware.ValidatorMiddleWare>(middleware.ValidatorMiddleWare).toSelf();
+
 // repositories
 for (const repositoryName in repository) {
   const Repository = repository[repositoryName]
   container.bind<typeof Repository>(Repository).toSelf()
+}
+
+for (const validatorName in validator){
+  const Validator = validator[validatorName];
+  container.bind<typeof Validator>(Validator).to(Validator);
 }
 
 export default container
