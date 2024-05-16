@@ -5,26 +5,40 @@ import { BaseMiddleware } from 'inversify-express-utils'
 import { ParsedQs } from 'qs'
 import customErrorHandler from '../handler/errorHandler'
 import { AuthorValidation } from '../validations/authorValidation'
+import { CateogoryValidation, UserValidation } from '../validations'
+import * as yup from 'yup'
 
 export class ValidatorMiddleWare extends BaseMiddleware {
+  private routes: { [key: string]: any }
   constructor(
-    @inject(AuthorValidation) private authorValidation: AuthorValidation
+    @inject(AuthorValidation) private authorValidation: AuthorValidation,
+    @inject(CateogoryValidation)
+    private categoryValidation: CateogoryValidation,
+    @inject(UserValidation) private userValidation: UserValidation
   ) {
     super()
+    this.routes = {
+      '/author': this.authorValidation.authorValidationSchema,
+      '/category': this.categoryValidation.categoryValidationSchema,
+      '/users/signup': this.userValidation.userValidationSchema
+    }
   }
+
   async handler(
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>,
     next: NextFunction
   ): Promise<void> {
     try {
-      await this.authorValidation.authorValidationSchema.validate(req.body, {
-        abortEarly: false
-      })
-      // If validation succeeds, proceed to the next middleware or route handler
+      const route = req.path
+      const schema = this.routes[route]
+      if (Object.values(schema)) {
+        await schema.validate(req.body, {
+          abortEarly: false
+        })
+      }
       next()
     } catch (err) {
-        console.log(err)
       customErrorHandler(err, req, res, next)
     }
   }

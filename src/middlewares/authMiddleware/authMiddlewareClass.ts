@@ -3,13 +3,19 @@ import jwt, { VerifyErrors } from 'jsonwebtoken'
 import { AuthenticatedRequest } from '../../interfaces'
 import { BaseMiddleware } from 'inversify-express-utils'
 import { errorCodes } from '../../constants'
+import customErrorHandler from '../../handler/errorHandler'
 
 export class JwtAuthenticationMiddleware extends BaseMiddleware {
   handler(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
     // Extract the JWT token from the Authorization header
     const authHeader = req.headers.authorization
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      res.status(errorCodes.UNAUTHORIZED).json({ error: 'Unauthorized' })
+      // res.status(errorCodes.UNAUTHORIZED).json({ error: 'Unauthorized' })
+      // return
+      const error = {
+        name: 'TokenNotFoundError'
+      }
+      customErrorHandler(error, req, res, next)
       return
     }
 
@@ -21,7 +27,7 @@ export class JwtAuthenticationMiddleware extends BaseMiddleware {
       process.env.JWT_SECRET_KEY as string,
       (err: VerifyErrors | null, decoded: any) => {
         if (err) {
-          res.status(errorCodes.UNAUTHORIZED).json({ error: 'Unauthorized' })
+          customErrorHandler(err, req, res, next)
           return
         }
         // If token is valid, set decoded user data on request object

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { inject } from 'inversify'
 import {
   controller,
@@ -8,15 +8,18 @@ import {
   httpPost,
   httpPut,
   request,
-  response
+  response,
+  next
 } from 'inversify-express-utils'
 import { CategoryService } from '../../services'
 import { Category } from '../../interfaces'
 import { errorCodes } from '../../constants'
 import {
   IsAdminMiddleware,
-  JwtAuthenticationMiddleware
+  JwtAuthenticationMiddleware,
+  ValidatorMiddleWare
 } from '../../middlewares'
+import customErrorHandler from '../../handler/errorHandler'
 
 @controller('/category', JwtAuthenticationMiddleware, IsAdminMiddleware)
 export class CategoryController {
@@ -50,7 +53,7 @@ export class CategoryController {
 
       return res.json(result)
     } catch (error) {
-      return res.status(500).json({ error: 'Internal Server Error' })
+      customErrorHandler(error, req, res, next)
     }
   }
 
@@ -65,9 +68,7 @@ export class CategoryController {
       )
       res.status(errorCodes.OK).json(categories)
     } catch (error) {
-      res
-        .status(errorCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Internal Server Error', message: error })
+      customErrorHandler(error, req, res, next)
     }
   }
 
@@ -82,26 +83,22 @@ export class CategoryController {
       }
       res.status(errorCodes.OK).json(category)
     } catch (error) {
-      res
-        .status(errorCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Internal Server Error', message: error.message })
+      customErrorHandler(error, req, res, next)
     }
   }
 
-  @httpPost('/createCategory')
+  @httpPost('/', ValidatorMiddleWare)
   async createCategory(
     @request() req: Request,
-    @response() res: Response
+    @response() res: Response,
+    @next() next: NextFunction
   ): Promise<void> {
     const newCategory: Category = req.body
     try {
       const category = await this.categoryService.createCategory(newCategory)
       res.status(errorCodes.CREATED).json(category)
     } catch (error) {
-      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({
-        error: 'Internal Server Error',
-        message: error.errorResponse.errmsg
-      })
+      customErrorHandler(error, req, res, next)
     }
   }
 
@@ -122,10 +119,7 @@ export class CategoryController {
       }
       res.status(errorCodes.OK).json(category)
     } catch (error) {
-      res.status(errorCodes.INTERNAL_SERVER_ERROR).json({
-        error: 'Internal Server Error',
-        message: error.errorResponse.errmsg
-      })
+      customErrorHandler(error, req, res, next)
     }
   }
 
@@ -141,9 +135,7 @@ export class CategoryController {
       }
       res.status(errorCodes.NO_CONTENT).end()
     } catch (error) {
-      res
-        .status(errorCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Internal Server Error' })
+      customErrorHandler(error, req, res, next)
     }
   }
 
@@ -154,9 +146,7 @@ export class CategoryController {
       const categories = await this.categoryService.searchCategories(keyword)
       res.status(errorCodes.OK).json(categories)
     } catch (error) {
-      res
-        .status(errorCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Internal Server Error', message: error })
+      customErrorHandler(error, req, res, next)
     }
   }
 }

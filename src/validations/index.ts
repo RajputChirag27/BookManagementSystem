@@ -1,5 +1,7 @@
 import { AuthorValidation } from './authorValidation'
-import userValidationSchema from './userValidation'
+import UserValidation from './userValidation'
+import CateogoryValidation from './categoryValidation'
 
-export { userValidationSchema }
-export {AuthorValidation}
+export { UserValidation }
+export { AuthorValidation }
+export { CateogoryValidation }

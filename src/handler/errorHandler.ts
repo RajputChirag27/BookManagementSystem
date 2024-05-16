@@ -28,16 +28,21 @@ const customErrorHandler = (
 
       case 'ValidationError':
         if (err instanceof yup.ValidationError) {
-          errorMessage = err.errors.join(', '); // Extracting the error messages
+          errorMessage = err.errors.join(', ') // Extracting the error messages
         } else {
-          errorMessage = 'Validation Error';
+          errorMessage = 'Validation Error'
         }
-        statusCode = errorCodes.BAD_REQUEST;
+        statusCode = errorCodes.BAD_REQUEST
         break
 
       case 'CastError':
         errorMessage = 'Please provide a valid ID'
         statusCode = errorCodes.BAD_REQUEST
+        break
+
+      case 'TokenNotFoundError':
+        errorMessage = 'Token Not Found'
+        statusCode = errorCodes.NOT_FOUND
         break
 
       case 'TokenExpiredError':
@@ -55,7 +60,7 @@ const customErrorHandler = (
         break
     }
 
-    console.log('Custom Error Handler => ', err.name, errorMessage, statusCode)
+    // console.log('Custom Error Handler => ', err.name, errorMessage, statusCode)
 
     if (res) {
       return res.status(statusCode).json({

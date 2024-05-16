@@ -16,8 +16,7 @@ import { AuthenticatedRequest, Author } from '../../interfaces'
 import {
   IsAdminMiddleware,
   JwtAuthenticationMiddleware,
-  ValidatorMiddleWare,
-  authenticateJwt
+  ValidatorMiddleWare
 } from '../../middlewares'
 import { errorCodes } from '../../constants'
 import customErrorHandler from '../../handler/errorHandler'
@@ -41,7 +40,7 @@ export class AuthorController {
     }
   }
 
-  @httpPost('/createAuthor', IsAdminMiddleware, ValidatorMiddleWare)
+  @httpPost('/', IsAdminMiddleware, ValidatorMiddleWare)
   public async createAuthor(
     @request() req: AuthenticatedRequest,
     @response() res: Response,

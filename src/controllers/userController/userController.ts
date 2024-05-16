@@ -4,17 +4,21 @@ import UserService from '../../services/userService/userService'
 import { inject } from 'inversify'
 import { User } from '../../interfaces/index'
 import dotenv from 'dotenv'
+import customErrorHandler from '../../handler/errorHandler'
 dotenv.config()
 
 import { AuthenticatedRequest } from '../../interfaces'
-import { JwtAuthenticationMiddleware } from '../../middlewares'
+import {
+  JwtAuthenticationMiddleware,
+  ValidatorMiddleWare
+} from '../../middlewares'
 
 @controller('/users')
 export class UserController {
   constructor(@inject(UserService) private userService: UserService) {}
 
-  @httpPost('/signup')
-  async signup(req: Request, res: Response) {
+  @httpPost('/signup', ValidatorMiddleWare)
+  async signup(req: Request, res: Response, next: NextFunction) {
     try {
       const user: User = req.body
       // Hash password
@@ -25,11 +29,13 @@ export class UserController {
       // Create new user
       const newUser = await this.userService.signup(user)
       res.status(201).json(newUser)
-    } catch (error) {}
+    } catch (error) {
+      customErrorHandler(error, req, res, next)
+    }
   }
 
   @httpPost('/login')
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
       const user: User = req.body
 
@@ -47,16 +53,20 @@ export class UserController {
         res.send('User not found')
       }
     } catch (err) {
-      res.send(err)
+      customErrorHandler(err, req, res, next)
     }
   }
 
   @httpGet('/protected', JwtAuthenticationMiddleware)
-  async protected(req: AuthenticatedRequest, res: Response) {
+  async protected(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       res.send('Protected Route')
     } catch (err) {
-      res.send(err)
+      customErrorHandler(err, req, res, next)
     }
   }
 }

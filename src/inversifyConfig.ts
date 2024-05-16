@@ -34,9 +34,9 @@ for (const repositoryName in repository) {
   container.bind<typeof Repository>(Repository).toSelf()
 }
 
-for (const validatorName in validator){
-  const Validator = validator[validatorName];
-  container.bind<typeof Validator>(Validator).to(Validator);
+for (const validatorName in validator) {
+  const Validator = validator[validatorName]
+  container.bind<typeof Validator>(Validator).to(Validator)
 }
 
 export default container
