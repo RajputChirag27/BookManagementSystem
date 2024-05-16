@@ -56,12 +56,18 @@ const customErrorHandler = (
         break
 
       case 'ForbiddenError':
-        ;(errorMessage = "Not permitted Because you aren't admin "),
-          (statusCode = errorCodes.FORBIDDEN)
+        errorMessage = "Not permitted Because you aren't admin ",
+          statusCode = errorCodes.FORBIDDEN
+        break
+
+        case 'CategoryNotFoundError':
+        errorMessage = "The Category you are looking for is not found ",
+          statusCode = errorCodes.NOT_FOUND
         break
 
       default:
         errorMessage = 'Server Error'
+        statusCode = errorCodes.INTERNAL_SERVER_ERROR
         break
     }
 

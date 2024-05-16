@@ -128,12 +128,15 @@ export class CategoryController {
     const categoryId = req.params.id
     try {
       const deleted = await this.categoryService.deleteCategory(categoryId)
-      res.send({ deleted, message: 'Deleted Successfully' })
-      if (!deleted) {
-        res.status(errorCodes.NOT_FOUND).json({ error: 'Category not found' })
-        return
+      if(deleted === null){
+        const err = {
+          name : 'CategoryNotFoundError'
+        }
+        customErrorHandler(err,req,res,next);
+        return;
+      } else{
+        res.send({ deleted, message: 'Deleted Successfully' })
       }
-      res.status(errorCodes.NO_CONTENT).end()
     } catch (error) {
       customErrorHandler(error, req, res, next)
     }

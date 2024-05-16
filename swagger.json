@@ -10,6 +10,10 @@
       {
           "url": "http://localhost:3000",
           "description" : "Local Server"
+      },
+      {
+        "url": "http://localhost:4000",
+        "description" : "Production Server"
       }
   ],
   "paths": {
@@ -61,6 +65,9 @@
               "responses": {
                   "200": {
                       "description": "Ok Signed Up succesfully"
+                  },
+                  "500" : {
+                    "description": "Internal Server Error"
                   }
               }
           }
@@ -313,6 +320,12 @@
               "tags": [
                   "Category"
               ],
+              "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+              
               "summary": "New Request",
               "description": "New Request",
               "operationId": "newRequest",
