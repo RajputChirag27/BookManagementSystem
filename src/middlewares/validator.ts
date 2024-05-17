@@ -7,6 +7,7 @@ import customErrorHandler from '../handler/errorHandler'
 import { AuthorValidation } from '../validations/authorValidation'
 import { CateogoryValidation, UserValidation } from '../validations'
 import * as yup from 'yup'
+import { BookValidation } from '../validations/bookValidation'
 
 export class ValidatorMiddleWare extends BaseMiddleware {
   private routes: { [key: string]: any }
@@ -14,13 +15,15 @@ export class ValidatorMiddleWare extends BaseMiddleware {
     @inject(AuthorValidation) private authorValidation: AuthorValidation,
     @inject(CateogoryValidation)
     private categoryValidation: CateogoryValidation,
-    @inject(UserValidation) private userValidation: UserValidation
+    @inject(UserValidation) private userValidation: UserValidation,
+    @inject(BookValidation) private bookValidation: BookValidation
   ) {
     super()
     this.routes = {
       '/author': this.authorValidation.authorValidationSchema,
       '/category': this.categoryValidation.categoryValidationSchema,
-      '/users/signup': this.userValidation.userValidationSchema
+      '/users/signup': this.userValidation.userValidationSchema,
+      '/books' : this.bookValidation.bookValidationSchema
     }
   }
 

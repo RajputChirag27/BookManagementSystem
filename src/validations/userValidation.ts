@@ -19,5 +19,5 @@ export default class UserValidation {
       .string()
       .oneOf(['user', 'admin', 'author'], 'Invalid role')
       .required('Role is required')
-  })
+  }).strict().noUnknown();
 }

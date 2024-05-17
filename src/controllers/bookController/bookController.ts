@@ -12,7 +12,8 @@ import { BookService } from '../../services'
 import { AuthenticatedRequest, Book } from '../../interfaces'
 import {
   IsAdminMiddleware,
-  JwtAuthenticationMiddleware
+  JwtAuthenticationMiddleware,
+  ValidatorMiddleWare
 } from '../../middlewares'
 import { errorCodes } from '../../constants'
 import { customErrorHandler } from '../../handler'
@@ -21,7 +22,7 @@ import { customErrorHandler } from '../../handler'
 export class BookController {
   constructor(@inject(BookService) private bookService: BookService) {}
 
-  @httpPost('/', JwtAuthenticationMiddleware, IsAdminMiddleware)
+  @httpPost('/', JwtAuthenticationMiddleware, IsAdminMiddleware, ValidatorMiddleWare)
   async createBook(
     req: AuthenticatedRequest,
     res: Response,

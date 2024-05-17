@@ -17,5 +17,5 @@ export class AuthorValidation {
       .of(yup.number().required('Age is required'))
       .min(1, 'At least one age is required'),
     books: yup.array().of(yup.string().required('Book ID is required')) // Assuming the book ID is a string
-  })
+  }).strict().noUnknown();
 }
