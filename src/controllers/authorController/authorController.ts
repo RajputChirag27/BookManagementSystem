@@ -8,7 +8,6 @@ import {
   httpPatch,
   request,
   response,
-  Middleware,
   next
 } from 'inversify-express-utils'
 import { AuthorService } from '../../services/authorService/authorService'

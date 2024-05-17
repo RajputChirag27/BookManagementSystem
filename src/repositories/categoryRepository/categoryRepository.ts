@@ -46,7 +46,7 @@ export default class CategoryRepository {
       const deleted = await CategoryModel.findOneAndDelete({ _id: id }).exec()
       return deleted
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err)
     }
   }
   // async getCategoryByProductId(id : string){

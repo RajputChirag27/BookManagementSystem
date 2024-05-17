@@ -1,10 +1,3 @@
-import { CategoryService } from 'src/services'
-import {
-  AuthorController,
-  CategoryController,
-  UserController
-} from '../controllers'
-
 const TYPES = {
   // Controllers
   UserController: Symbol.for('UserController'),

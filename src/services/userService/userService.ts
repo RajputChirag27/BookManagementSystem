@@ -1,6 +1,5 @@
 import { injectable, inject } from 'inversify'
 import { User } from '../../interfaces'
-import bcrypt from 'bcrypt'
 import UserRepository from '../../repositories/userRepository/userRepository'
 
 @injectable()

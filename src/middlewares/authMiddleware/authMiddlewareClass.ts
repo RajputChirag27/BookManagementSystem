@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 import jwt, { VerifyErrors } from 'jsonwebtoken'
 import { AuthenticatedRequest } from '../../interfaces'
 import { BaseMiddleware } from 'inversify-express-utils'

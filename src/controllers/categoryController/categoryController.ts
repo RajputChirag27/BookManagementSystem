@@ -6,7 +6,6 @@ import {
   httpGet,
   httpPatch,
   httpPost,
-  httpPut,
   request,
   response,
   next
@@ -128,13 +127,13 @@ export class CategoryController {
     const categoryId = req.params.id
     try {
       const deleted = await this.categoryService.deleteCategory(categoryId)
-      if(deleted === null){
+      if (deleted === null) {
         const err = {
-          name : 'CategoryNotFoundError'
+          name: 'CategoryNotFoundError'
         }
-        customErrorHandler(err,req,res,next);
-        return;
-      } else{
+        customErrorHandler(err, req, res, next)
+        return
+      } else {
         res.send({ deleted, message: 'Deleted Successfully' })
       }
     } catch (error) {

@@ -6,7 +6,6 @@ import { ParsedQs } from 'qs'
 import customErrorHandler from '../handler/errorHandler'
 import { AuthorValidation } from '../validations/authorValidation'
 import { CateogoryValidation, UserValidation } from '../validations'
-import * as yup from 'yup'
 import { BookValidation } from '../validations/bookValidation'
 
 export class ValidatorMiddleWare extends BaseMiddleware {
@@ -23,7 +22,7 @@ export class ValidatorMiddleWare extends BaseMiddleware {
       '/author': this.authorValidation.authorValidationSchema,
       '/category': this.categoryValidation.categoryValidationSchema,
       '/users/signup': this.userValidation.userValidationSchema,
-      '/books' : this.bookValidation.bookValidationSchema
+      '/books': this.bookValidation.bookValidationSchema
     }
   }
 

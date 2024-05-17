@@ -1,9 +1,7 @@
 import { injectable } from 'inversify'
 import { NextFunction, Response } from 'express'
-import { AuthenticatedRequest, User } from '../../interfaces'
-import { UserModel } from '../../models'
+import { AuthenticatedRequest } from '../../interfaces'
 import { BaseMiddleware } from 'inversify-express-utils'
-import { errorCodes } from '../../constants'
 import { customErrorHandler } from '../../handler'
 
 @injectable()

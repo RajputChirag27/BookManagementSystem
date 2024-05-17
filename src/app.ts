@@ -2,7 +2,6 @@
 import 'reflect-metadata'
 import express from 'express'
 import { InversifyExpressServer } from 'inversify-express-utils'
-import mongoose from 'mongoose'
 import container from './inversifyConfig'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from '../swagger.json'

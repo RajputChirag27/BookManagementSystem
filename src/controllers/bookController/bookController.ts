@@ -4,7 +4,6 @@ import {
   controller,
   httpGet,
   httpPost,
-  httpPut,
   httpDelete,
   httpPatch
 } from 'inversify-express-utils'
@@ -22,7 +21,12 @@ import { customErrorHandler } from '../../handler'
 export class BookController {
   constructor(@inject(BookService) private bookService: BookService) {}
 
-  @httpPost('/', JwtAuthenticationMiddleware, IsAdminMiddleware, ValidatorMiddleWare)
+  @httpPost(
+    '/',
+    JwtAuthenticationMiddleware,
+    IsAdminMiddleware,
+    ValidatorMiddleWare
+  )
   async createBook(
     req: AuthenticatedRequest,
     res: Response,
