@@ -10,15 +10,16 @@ export class AuthorRepository {
     try {
       let queryObject = { ...queries }
 
+   
+
       // Basic Filtaration
-      const excludeFields = ['page', 'sort', 'limit', 'fields', 'filter']
+      const excludeFields = ['page', 'sort', 'limit', 'fields', 'filter', 'search']
       excludeFields.forEach(item => delete queryObject[item])
 
-      console.log(queryObject)
-
-      console.log(queryObject)
 
       // Advance Filtering
+
+  
 
       // Search on the basis of the name of the Author
 
@@ -41,12 +42,26 @@ export class AuthorRepository {
       queryObject = JSON.parse(queryString)
 
 
-      for (const key in queryObject) {
-        if (queryObject.hasOwnProperty(key)) {
-          console.log(key, queryObject[key])
-        }
-      }
+   
 
+          // Dynamic Searching 
+
+          if (queries.search) {
+            const searchRegex = new RegExp(queries.search, 'i'); // Create a case-insensitive regex
+            console.log("searchRegex: " + searchRegex)
+            const searchConditions = Object.keys(AuthorModel.schema.paths).reduce((conditions, field) => {
+              const fieldType = AuthorModel.schema.paths[field].instance;
+              if (fieldType !== 'Number' && fieldType !== 'Array' && fieldType !== 'ObjectId') {
+                  conditions.push({ [field]: searchRegex });
+              }
+              return conditions;
+          }, []);
+          
+            queryObject.$or = searchConditions;
+          }
+
+
+      console.log("Final: "+ queryObject)
       let query = AuthorModel.find({ ...queryObject })
       const countQuery = AuthorModel.find({ ...queryObject })
 
@@ -101,9 +116,8 @@ export class AuthorRepository {
         { statusCode: errorCodes.OK }
       )
     } catch (err) {
-      throw Object.assign(new Error('Internal Server Error!'), {
-        statusCode: errorCodes.INTERNAL_SERVER_ERROR
-      })
+      console.log(err.stack);
+     throw new Error("This is cast Error");
     }
   }
 

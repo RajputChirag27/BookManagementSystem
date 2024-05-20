@@ -16,7 +16,11 @@ export class AuthorService {
   }
 
   public async createAuthor(author: Author) {
-    return await this.authorRepository.createAuthor(author)
+    const result = await this.authorRepository.createAuthor(author)
+    if(!result){
+      throw new Error("Invalid Details")
+    }
+    return result;
   }
 
   async updateAuthor(id: string, author: Author): Promise<Author> {
