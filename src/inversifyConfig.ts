@@ -4,6 +4,7 @@ import * as repository from './repositories'
 import * as service from './services/index'
 import * as middleware from './middlewares'
 import * as validator from './validations'
+import { TYPES } from './types/types'
 
 const container = new Container()
 

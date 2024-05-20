@@ -11,10 +11,25 @@ export class AuthorRepository {
       let queryObject = { ...queries }
 
       // Basic Filtaration
-      const excludeFields = ['page', 'sort', 'limit', 'fields']
+      const excludeFields = ['page', 'sort', 'limit', 'fields', 'filter']
       excludeFields.forEach(item => delete queryObject[item])
 
+      console.log(queryObject)
+
+      console.log(queryObject)
+
       // Advance Filtering
+
+      // Search on the basis of the name of the Author
+
+      if (queries.filter) {
+        const filterFields = queries.filter
+        for (const field of Object.keys(filterFields)) {
+          if (filterFields[field]) {
+            queryObject[field] = filterFields[field]
+          }
+        }
+      }
 
       let queryString = JSON.stringify(queryObject)
 
@@ -25,13 +40,11 @@ export class AuthorRepository {
 
       queryObject = JSON.parse(queryString)
 
-      // Search on the basis of the name of the Author
 
-      if (queryObject.name) {
-        queryObject.name = new RegExp(queryObject.name, 'i')
-      }
-      if (queryObject.nationality) {
-        queryObject.nationality = new RegExp(queryObject.nationality, 'i')
+      for (const key in queryObject) {
+        if (queryObject.hasOwnProperty(key)) {
+          console.log(key, queryObject[key])
+        }
       }
 
       let query = AuthorModel.find({ ...queryObject })
