@@ -67,3 +67,11 @@ export const errorCodes: myObject = {
   NOT_EXTENDED: 510,
   NETWORK_AUTHENTICATION_REQUIRED: 511
 }
+
+
+// const permissions = {
+//   "admin" : {
+//     "routes" : ["/admin/ViewUsers"],
+//     "services" : ["getAllUsers"]
+//   }
+// }

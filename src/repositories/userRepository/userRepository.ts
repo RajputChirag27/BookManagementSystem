@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt'
 import { User } from 'src/interfaces'
 import { UserModel } from '../../models'
 import jwt from 'jsonwebtoken'
+import { config } from 'dotenv'
+config();
 
 @injectable()
 export default class UserRepository {
@@ -35,7 +37,7 @@ export default class UserRepository {
   async createToken(payload: object): Promise<string> {
     const secretKey = process.env.JWT_SECRET_KEY
     const token: string = await jwt.sign(payload, secretKey, {
-      expiresIn: '1h'
+      expiresIn: process.env.JWT_EXPIRE_TIME
     })
     return token
   }
