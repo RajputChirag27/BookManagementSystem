@@ -71,7 +71,7 @@ const customErrorHandler = (
         break
     }
 
-    console.log('Custom Error Handler => ', err.name, errorMessage, statusCode)
+    console.log('Custom Error Handler => ', err.name, errorMessage, statusCode, err.message)
 
     if (res) {
       return res.status(statusCode).json({

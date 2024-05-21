@@ -21,7 +21,7 @@ const userSchema: Schema<User> = new Schema({
     emum: ['user', 'admin', 'author'],
     default: 'user'
   }
-})
+}, {timestamps : true})
 
 const UserModel = mongoose.model<User>('User', userSchema)
 

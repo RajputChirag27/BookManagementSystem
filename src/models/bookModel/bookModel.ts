@@ -25,7 +25,7 @@ const bookSchema: Schema<Book> = new mongoose.Schema({
     type: Number,
     required: true
   }
-})
+}, {timestamps : true})
 
 const BookModel = mongoose.model<Book>('Book', bookSchema)
 

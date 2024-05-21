@@ -8,7 +8,7 @@ const AuthorSchema = new Schema<Author>({
   nationality: { type: String, required: true },
   age: { type: Number, required: true },
   books: [{ type: Schema.Types.ObjectId, ref: 'Book' }] // Assuming 'Book' is the model name for books
-})
+}, {timestamps : true})
 
 AuthorSchema.index({ name: 'text', email: 'text', biography: 'text', nationality: 'text' })
 

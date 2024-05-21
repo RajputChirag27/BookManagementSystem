@@ -47,32 +47,43 @@ export class AuthorRepository {
           // Dynamic Searching 
 
           if (queries.search) {
+            // Convert queries.search to string if it's not already a string
+            if (typeof queries.search !== 'string') {
+              queries.search = queries.search.toString();
+            }
+          
             const searchRegex = new RegExp(queries.search, 'i'); // Create a case-insensitive regex
-            console.log("searchRegex: " + searchRegex)
+            console.log("searchRegex: " + searchRegex);
+            
+            // Check if the search query is a valid number
+            const searchNumber = !isNaN(queries.search) ? Number(queries.search) : null;
+            console.log(searchNumber)
+            
             const searchConditions = Object.keys(AuthorModel.schema.paths).reduce((conditions, field) => {
               const fieldType = AuthorModel.schema.paths[field].instance;
-              if (fieldType !== 'Number' && fieldType !== 'Array' && fieldType !== 'ObjectId') {
-                  conditions.push({ [field]: searchRegex });
+              
+              if (fieldType === 'String' && searchNumber === null) {
+                console.log("string")
+                // Add regex condition for string fields
+                conditions.push({ [field]: searchRegex });
+              } else if (fieldType === 'Number' && searchNumber !== null) {
+                // Add exact match condition for number fields
+                console.log("number")
+                conditions.push({ [field]: searchNumber });
               }
+              // Optionally, handle other field types here
               return conditions;
-          }, []);
-          
+            }, []);
+            
             queryObject.$or = searchConditions;
           }
+          
 
-
-      console.log("Final: "+ queryObject)
+      // console.log("Final: "+ queryObject)
       let query = AuthorModel.find({ ...queryObject })
       const countQuery = AuthorModel.find({ ...queryObject })
 
-      // Sorting
-      if (queries.sort) {
-        const sortBy = (queries.sort as string).split(',').join(' ')
-        query = query.sort(sortBy)
-      } else {
-        query = query.sort({ createdAt: -1 })
-      }
-
+  
       // Projection
       if (queries.fields) {
         const fields = (queries.fields as string).split(',').join(' ')
@@ -100,6 +111,15 @@ export class AuthorRepository {
           })
         }
       }
+
+          // Sorting
+          if (queries.sort) {
+            const sortBy = (queries.sort as string).split(',').join(' ')
+            query = query.sort(sortBy)
+          } else {
+            query = query.sort({ createdAt: -1 })
+          }
+    
       const authors = await query
 
       return Object.assign(
