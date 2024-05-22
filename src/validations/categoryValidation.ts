@@ -10,7 +10,7 @@ export class CateogoryValidation {
       name: yup
         .string()
         .required('Name is required')
-        .max(255, 'Name cannot exceed 255 characters')
+        .max(255, 'Name cannot exceed 255 characters'),
     })
     .strict()
     .noUnknown()

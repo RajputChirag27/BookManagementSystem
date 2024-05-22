@@ -65,9 +65,8 @@ export const errorCodes: myObject = {
   LOOP_DETECTED: 508,
   BANDWIDTH_LIMIT_EXCEEDED: 509,
   NOT_EXTENDED: 510,
-  NETWORK_AUTHENTICATION_REQUIRED: 511
+  NETWORK_AUTHENTICATION_REQUIRED: 511,
 }
-
 
 // const permissions = {
 //   "admin" : {

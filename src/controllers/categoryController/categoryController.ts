@@ -8,7 +8,7 @@ import {
   httpPost,
   request,
   response,
-  next
+  next,
 } from 'inversify-express-utils'
 import { CategoryService } from '../../services'
 import { Category } from '../../interfaces'
@@ -16,7 +16,7 @@ import { errorCodes } from '../../constants'
 import {
   IsAdminMiddleware,
   JwtAuthenticationMiddleware,
-  ValidatorMiddleWare
+  ValidatorMiddleWare,
 } from '../../middlewares'
 import { customErrorHandler } from '../../handler'
 
@@ -35,7 +35,7 @@ export class CategoryController {
         sortField,
         sortOrder,
         pageNumber,
-        pageSize
+        pageSize,
       } = req.query
 
       // Provide default values for missing parameters
@@ -129,7 +129,7 @@ export class CategoryController {
       const deleted = await this.categoryService.deleteCategory(categoryId)
       if (deleted === null) {
         const err = {
-          name: 'CategoryNotFoundError'
+          name: 'CategoryNotFoundError',
         }
         customErrorHandler(err, req, res, next)
         return

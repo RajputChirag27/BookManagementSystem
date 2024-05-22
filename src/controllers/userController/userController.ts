@@ -8,7 +8,7 @@ import { customErrorHandler } from '../../handler'
 import { AuthenticatedRequest } from '../../interfaces'
 import {
   JwtAuthenticationMiddleware,
-  ValidatorMiddleWare
+  ValidatorMiddleWare,
 } from '../../middlewares'
 dotenv.config()
 

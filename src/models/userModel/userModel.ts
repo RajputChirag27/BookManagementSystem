@@ -1,27 +1,30 @@
 import mongoose, { Schema } from 'mongoose'
 import { User } from '../../interfaces/userInterface/userInterface'
 
-const userSchema: Schema<User> = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
+const userSchema: Schema<User> = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      emum: ['user', 'admin', 'author'],
+      default: 'user',
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  role: {
-    type: String,
-    emum: ['user', 'admin', 'author'],
-    default: 'user'
-  }
-}, {timestamps : true})
+  { timestamps: true }
+)
 
 const UserModel = mongoose.model<User>('User', userSchema)
 

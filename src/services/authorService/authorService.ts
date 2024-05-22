@@ -2,6 +2,8 @@ import { injectable, inject } from 'inversify'
 import { AuthorRepository } from '../../repositories/authorRepository/authorRepository'
 import { Author } from 'src/interfaces'
 import { PaginationService } from '../paginationService/paginationService'
+import CustomError from '../../helpers/customError'
+import { errorCodes } from '../../constants'
 
 @injectable()
 export class AuthorService {
@@ -17,10 +19,14 @@ export class AuthorService {
 
   public async createAuthor(author: Author) {
     const result = await this.authorRepository.createAuthor(author)
-    if(!result){
-      throw new Error("Invalid Details")
+    if (!result) {
+      throw new CustomError(
+        "Didn't Create Author Invalid Details",
+        errorCodes.BAD_REQUEST,
+        'InvalidDetails'
+      )
     }
-    return result;
+    return result
   }
 
   async updateAuthor(id: string, author: Author): Promise<Author> {
@@ -29,7 +35,11 @@ export class AuthorService {
     if (result) {
       return result
     } else {
-      throw new Error('Author not found')
+      throw new CustomError(
+        'Author not found',
+        errorCodes.NOT_FOUND,
+        'NotFound'
+      )
     }
   }
   async deleteAuthor(id: string) {

@@ -29,7 +29,7 @@ const TYPES = {
   UserRepository: Symbol.for('UserRepository'),
   CategoryRepository: Symbol.for('CategoryRepository'),
   AuthorRepository: Symbol.for('AuthorRepository'),
-  BookRepository: Symbol.for('BookRepository')
+  BookRepository: Symbol.for('BookRepository'),
 }
 
 export { TYPES }

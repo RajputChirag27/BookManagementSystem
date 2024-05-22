@@ -1,6 +1,8 @@
 import { injectable } from 'inversify'
 import { Category } from '../../interfaces'
 import { CategoryModel } from '../../models'
+import { errorCodes } from '../../constants'
+import CustomError from '../../helpers/customError'
 
 @injectable()
 export default class CategoryRepository {
@@ -46,7 +48,11 @@ export default class CategoryRepository {
       const deleted = await CategoryModel.findOneAndDelete({ _id: id }).exec()
       return deleted
     } catch (err) {
-      throw new Error(err)
+      throw new CustomError(
+        'This Category cannot be deleted',
+        errorCodes.NOT_MODIFIED,
+        'NotDeleted'
+      )
     }
   }
   // async getCategoryByProductId(id : string){
@@ -74,8 +80,8 @@ export default class CategoryRepository {
     if (searchQuery) {
       pipeline.push({
         $match: {
-          name: { $regex: searchQuery, $options: 'i' } // Case-insensitive search
-        }
+          name: { $regex: searchQuery, $options: 'i' }, // Case-insensitive search
+        },
       })
     }
 
@@ -83,8 +89,8 @@ export default class CategoryRepository {
     if (categoryName) {
       pipeline.push({
         $match: {
-          name: categoryName
-        }
+          name: categoryName,
+        },
       })
     }
 
@@ -115,7 +121,7 @@ export default class CategoryRepository {
       totalResults,
       totalPages,
       filteredPages: Math.ceil(categoryList.length / pageSize),
-      currentPage: pageNumber
+      currentPage: pageNumber,
     }
   }
 }

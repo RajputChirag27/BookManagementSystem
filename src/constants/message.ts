@@ -61,5 +61,5 @@ export const errorMessages: { [key: number]: string } = {
   508: 'Loop Detected: The server detected an infinite loop while processing the request.',
   509: 'Bandwidth Limit Exceeded: The server has exceeded the bandwidth specified by the server administrator.',
   510: 'Not Extended: Further extensions to the request are required for the server to fulfill it.',
-  511: 'Network Authentication Required: The client needs to authenticate to gain network access.'
+  511: 'Network Authentication Required: The client needs to authenticate to gain network access.',
 }

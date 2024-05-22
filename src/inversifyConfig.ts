@@ -5,7 +5,7 @@ import * as service from './services/index'
 import * as middleware from './middlewares'
 import * as validator from './validations'
 import { TYPES } from './types/types'
-
+import CustomError from './helpers/customError'
 const container = new Container()
 
 //  controllers
@@ -39,5 +39,7 @@ for (const validatorName in validator) {
   const Validator = validator[validatorName]
   container.bind<typeof Validator>(Validator).to(Validator)
 }
+
+container.bind<CustomError>(CustomError).to(CustomError)
 
 export default container

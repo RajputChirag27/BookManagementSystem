@@ -20,7 +20,7 @@ export default class UserValidation {
       role: yup
         .string()
         .oneOf(['user', 'admin', 'author'], 'Invalid role')
-        .required('Role is required')
+        .required('Role is required'),
     })
     .strict()
     .noUnknown()
