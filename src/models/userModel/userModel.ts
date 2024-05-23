@@ -22,6 +22,10 @@ const userSchema: Schema<User> = new Schema(
       emum: ['user', 'admin', 'author'],
       default: 'user',
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 )

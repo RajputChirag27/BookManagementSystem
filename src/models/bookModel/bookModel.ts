@@ -19,8 +19,6 @@ const bookSchema: Schema<Book> = new mongoose.Schema(
     },
     description: String,
     publishedYear: Number,
-    authorName: String,
-    categoryName: String,
 
     price: {
       type: Number,

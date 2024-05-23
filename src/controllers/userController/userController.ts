@@ -1,4 +1,4 @@
-import { controller, httpGet, httpPost } from 'inversify-express-utils'
+import { controller, httpDelete, httpGet, httpPost } from 'inversify-express-utils'
 import { NextFunction, Request, Response } from 'express'
 import UserService from '../../services/userService/userService'
 import { inject } from 'inversify'
@@ -67,5 +67,16 @@ export class UserController {
     } catch (err) {
       customErrorHandler(err, req, res, next)
     }
+  }
+
+  @httpDelete('/', JwtAuthenticationMiddleware)
+  async deleteUser( req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction){
+      try {
+        res.send('Protected Route')
+      } catch (err) {
+        customErrorHandler(err, req, res, next)
+      }
   }
 }
