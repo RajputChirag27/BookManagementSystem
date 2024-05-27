@@ -38,9 +38,11 @@ export class AuthorRepository {
       let queryString = JSON.stringify(queryObject)
 
       queryString = queryString.replace(
-        /\b(gte|gt|lte|lt)\b/g,
+        /\b(gte|gt|lte|lt|eq)\b/g,
         match => `$${match}`
       )
+
+      console.log(queryString);
 
       queryObject = JSON.parse(queryString)
 
@@ -145,7 +147,7 @@ export class AuthorRepository {
       throw new CustomError(
         'This is cast Error',
         errorCodes.BAD_REQUEST,
-        'CastError'
+        err.name
       )
     }
   }
