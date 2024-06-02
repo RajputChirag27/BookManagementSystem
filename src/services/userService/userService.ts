@@ -44,7 +44,5 @@ export default class UserService {
     return await this.userRepository.createToken(payload)
   }
 
-  async asingnRoles(roleName){
-    
-  }
+  async asingnRoles(roleName) {}
 }

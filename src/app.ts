@@ -12,14 +12,12 @@ dotenv.config()
 
 // Set up mongoose connection
 
-import {connection} from './config/dbConfig'
+import { connection } from './config/dbConfig'
 const url = process.env.URL
 
-connection(url);
+connection(url)
 
 // console.log(process.env)
-
-
 
 const port = process.env.PORT || 3000
 

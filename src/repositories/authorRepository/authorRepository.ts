@@ -42,7 +42,7 @@ export class AuthorRepository {
         match => `$${match}`
       )
 
-      console.log(queryString);
+      console.log(queryString)
 
       queryObject = JSON.parse(queryString)
 
