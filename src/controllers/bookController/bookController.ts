@@ -5,14 +5,14 @@ import {
   httpGet,
   httpPost,
   httpDelete,
-  httpPatch
+  httpPatch,
 } from 'inversify-express-utils'
 import { BookService } from '../../services'
 import { AuthenticatedRequest, Book } from '../../interfaces'
 import {
   IsAdminMiddleware,
   JwtAuthenticationMiddleware,
-  ValidatorMiddleWare
+  ValidatorMiddleWare,
 } from '../../middlewares'
 import { errorCodes } from '../../constants'
 import { customErrorHandler } from '../../handler'

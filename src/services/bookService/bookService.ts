@@ -19,6 +19,10 @@ class BookService {
     return data
   }
 
+  // async getBooksViaPipeline(query){
+    
+  // }
+
   async getBookById(id: string): Promise<Book> {
     return await this.bookRepository.getBookById(id)
   }

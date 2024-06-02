@@ -17,7 +17,7 @@ export class IsAdminMiddleware extends BaseMiddleware {
       console.log(user)
       if (!user || user.role !== 'admin') {
         const err = {
-          name: 'ForbiddenError'
+          name: 'ForbiddenError',
         }
         customErrorHandler(err, req, res, next)
       } else {

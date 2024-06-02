@@ -3,6 +3,7 @@ import { Author } from '../../interfaces'
 import { AuthorModel } from '../../models'
 import { errorCodes } from '../../constants'
 import { errorMessages } from '../../constants/message'
+import CustomError from '../../helpers/customError'
 
 @injectable()
 export class AuthorRepository {
@@ -11,39 +12,82 @@ export class AuthorRepository {
       let queryObject = { ...queries }
 
       // Basic Filtaration
-      const excludeFields = ['page', 'sort', 'limit', 'fields']
+      const excludeFields = [
+        'page',
+        'sort',
+        'limit',
+        'fields',
+        'filter',
+        'search',
+      ]
       excludeFields.forEach(item => delete queryObject[item])
 
       // Advance Filtering
 
+      // Search on the basis of the name of the Author
+
+      if (queries.filter) {
+        const filterFields = queries.filter
+        for (const field of Object.keys(filterFields)) {
+          if (filterFields[field]) {
+            queryObject[field] = filterFields[field]
+          }
+        }
+      }
+
       let queryString = JSON.stringify(queryObject)
 
       queryString = queryString.replace(
-        /\b(gte|gt|lte|lt)\b/g,
+        /\b(gte|gt|lte|lt|eq)\b/g,
         match => `$${match}`
       )
 
+      console.log(queryString);
+
       queryObject = JSON.parse(queryString)
 
-      // Search on the basis of the name of the Author
+      // Dynamic Searching
 
-      if (queryObject.name) {
-        queryObject.name = new RegExp(queryObject.name, 'i')
-      }
-      if (queryObject.nationality) {
-        queryObject.nationality = new RegExp(queryObject.nationality, 'i')
+      if (queries.search) {
+        // Convert queries.search to string if it's not already a string
+        if (typeof queries.search !== 'string') {
+          queries.search = queries.search.toString()
+        }
+
+        const searchRegex = new RegExp(queries.search, 'i') // Create a case-insensitive regex
+        console.log('searchRegex: ' + searchRegex)
+
+        // Check if the search query is a valid number
+        const searchNumber = !isNaN(queries.search)
+          ? Number(queries.search)
+          : null
+        console.log(searchNumber)
+
+        const searchConditions = Object.keys(AuthorModel.schema.paths).reduce(
+          (conditions, field) => {
+            const fieldType = AuthorModel.schema.paths[field].instance
+
+            if (fieldType === 'String' && searchNumber === null) {
+              console.log('string')
+              // Add regex condition for string fields
+              conditions.push({ [field]: searchRegex })
+            } else if (fieldType === 'Number' && searchNumber !== null) {
+              // Add exact match condition for number fields
+              console.log('number')
+              conditions.push({ [field]: searchNumber })
+            }
+            // Optionally, handle other field types here
+            return conditions
+          },
+          []
+        )
+
+        queryObject.$or = searchConditions
       }
 
+      // console.log("Final: "+ queryObject)
       let query = AuthorModel.find({ ...queryObject })
       const countQuery = AuthorModel.find({ ...queryObject })
-
-      // Sorting
-      if (queries.sort) {
-        const sortBy = (queries.sort as string).split(',').join(' ')
-        query = query.sort(sortBy)
-      } else {
-        query = query.sort({ createdAt: -1 })
-      }
 
       // Projection
       if (queries.fields) {
@@ -67,11 +111,22 @@ export class AuthorRepository {
       if (queries.page) {
         numOfRecords = await AuthorModel.countDocuments({ ...queryObject })
         if (skip > numOfRecords) {
-          throw Object.assign(new Error(errorMessages[404]), {
-            statusCode: errorCodes.NOT_FOUND
-          })
+          throw new CustomError(
+            errorMessages[404],
+            errorCodes.NOT_FOUND,
+            'NoContent'
+          )
         }
       }
+
+      // Sorting
+      if (queries.sort) {
+        const sortBy = (queries.sort as string).split(',').join(' ')
+        query = query.sort(sortBy)
+      } else {
+        query = query.sort({ createdAt: -1 })
+      }
+
       const authors = await query
 
       return Object.assign(
@@ -82,15 +137,18 @@ export class AuthorRepository {
             totalPages: Math.ceil(totalRecords / limit),
             page,
             limit,
-            totalRecords
-          }
+            totalRecords,
+          },
         },
         { statusCode: errorCodes.OK }
       )
     } catch (err) {
-      throw Object.assign(new Error('Internal Server Error!'), {
-        statusCode: errorCodes.INTERNAL_SERVER_ERROR
-      })
+      // console.log(err.stack);
+      throw new CustomError(
+        'This is cast Error',
+        errorCodes.BAD_REQUEST,
+        err.name
+      )
     }
   }
 
@@ -98,14 +156,18 @@ export class AuthorRepository {
     if (author) {
       return await AuthorModel.create(author)
     } else {
-      throw new Error('Author is not defined')
+      throw new CustomError(
+        'Author is not defined',
+        errorCodes.NOT_IMPLEMENTED,
+        'NotDefined'
+      )
     }
   }
 
   async updateAuthor(id: string, author: Author): Promise<Author | null> {
     try {
       const updated = await AuthorModel.findOneAndUpdate({ _id: id }, author, {
-        new: true
+        new: true,
       }).exec()
       return updated
     } catch (err) {

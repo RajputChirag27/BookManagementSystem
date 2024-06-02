@@ -3,6 +3,10 @@ import bcrypt from 'bcrypt'
 import { User } from 'src/interfaces'
 import { UserModel } from '../../models'
 import jwt from 'jsonwebtoken'
+import { config } from 'dotenv'
+import CustomError from '../../helpers/customError'
+import { errorCodes } from '../../constants'
+config()
 
 @injectable()
 export default class UserRepository {
@@ -19,14 +23,22 @@ export default class UserRepository {
   async login(user: User): Promise<User> {
     const userFound: User = await UserModel.findOne({ email: user.email })
     if (!userFound) {
-      throw new Error('User not found')
+      throw new CustomError(
+        'User not found',
+        errorCodes.NOT_FOUND,
+        'NotFoundError'
+      )
     }
     const isPasswordValid: boolean = await bcrypt.compare(
       user.password,
       userFound.password
     )
     if (!isPasswordValid) {
-      throw new Error('Invalid password')
+      throw new CustomError(
+        'Invalid password',
+        errorCodes.BAD_REQUEST,
+        'InvalidPassword'
+      )
     }
 
     return userFound
@@ -35,7 +47,7 @@ export default class UserRepository {
   async createToken(payload: object): Promise<string> {
     const secretKey = process.env.JWT_SECRET_KEY
     const token: string = await jwt.sign(payload, secretKey, {
-      expiresIn: '1h'
+      expiresIn: process.env.JWT_EXPIRE_TIME,
     })
     return token
   }

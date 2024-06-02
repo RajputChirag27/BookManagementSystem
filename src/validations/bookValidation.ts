@@ -18,7 +18,7 @@ export class BookValidation {
             if (!value) return true // If title is not provided, don't perform uniqueness check
             const existingBook = await BookModel.findOne({ title: value }) // Perform asynchronous check in your database
             return !existingBook // Return true if no existing book found with the same title
-          }
+          },
         }),
       author: yup.string().required('Author is required'),
       category: yup.string().required(),
@@ -27,7 +27,7 @@ export class BookValidation {
       publishedYear: yup.number().integer().min(0).nullable(),
       authorName: yup.string().nullable().trim(),
       categoryName: yup.string().nullable().trim(),
-      price: yup.number().required().min(0)
+      price: yup.number().required().min(0),
     })
     .strict()
     .noUnknown()

@@ -22,7 +22,7 @@ export class ValidatorMiddleWare extends BaseMiddleware {
       '/author': this.authorValidation.authorValidationSchema,
       '/category': this.categoryValidation.categoryValidationSchema,
       '/users/signup': this.userValidation.userValidationSchema,
-      '/books': this.bookValidation.bookValidationSchema
+      '/books': this.bookValidation.bookValidationSchema,
     }
   }
 
@@ -36,7 +36,7 @@ export class ValidatorMiddleWare extends BaseMiddleware {
       const schema = this.routes[route]
       if (Object.values(schema)) {
         await schema.validate(req.body, {
-          abortEarly: false
+          abortEarly: false,
         })
       }
       next()

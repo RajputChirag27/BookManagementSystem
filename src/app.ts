@@ -31,7 +31,7 @@ app.use(
   session({
     secret: 'your_secret_key', // Replace with a random secret key
     resave: true,
-    saveUninitialized: false
+    saveUninitialized: false,
   })
 )
 

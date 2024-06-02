@@ -34,7 +34,7 @@ export class BookRepository {
           { authorName: searchRegex },
           { categoryName: searchRegex },
           { ISBN: searchRegex },
-          { description: searchRegex }
+          { description: searchRegex },
         ]
       }
 
@@ -75,7 +75,7 @@ export class BookRepository {
         numOfRecords = await BookModel.countDocuments({ ...queryObject })
         if (skip > numOfRecords) {
           throw Object.assign(new Error(errorMessages[404]), {
-            statusCode: errorCodes.NOT_FOUND
+            statusCode: errorCodes.NOT_FOUND,
           })
         }
       }
@@ -89,8 +89,8 @@ export class BookRepository {
             totalPages: Math.ceil(totalRecords / limit),
             page,
             limit,
-            totalRecords
-          }
+            totalRecords,
+          },
         },
         { statusCode: errorCodes.OK }
       )
@@ -143,8 +143,8 @@ export class BookRepository {
       return await BookModel.find({
         $or: [
           { title: { $regex: query, $options: 'i' } },
-          { authorName: { $regex: query, $options: 'i' } }
-        ]
+          { authorName: { $regex: query, $options: 'i' } },
+        ],
       })
     } catch (error) {
       throw new Error('Could not search books')
@@ -168,9 +168,9 @@ export class BookRepository {
             { title: query },
             { authorName: query },
             { categoryName: query },
-            { ISBN: query }
-          ].filter(Boolean)
-        }
+            { ISBN: query },
+          ].filter(Boolean),
+        },
       ]
 
       // Check if publishedYear exists and add it to conditions
@@ -202,7 +202,7 @@ export class BookRepository {
 
       // Query books based on price range
       const books = await BookModel.find({
-        price: { $gte: minPrice, $lte: maxPrice }
+        price: { $gte: minPrice, $lte: maxPrice },
       })
 
       console.log('Filtered Books:', books)

@@ -8,14 +8,14 @@ import {
   httpPatch,
   request,
   response,
-  next
+  next,
 } from 'inversify-express-utils'
 import { AuthorService } from '../../services/authorService/authorService'
 import { AuthenticatedRequest, Author } from '../../interfaces'
 import {
   IsAdminMiddleware,
   JwtAuthenticationMiddleware,
-  ValidatorMiddleWare
+  ValidatorMiddleWare,
 } from '../../middlewares'
 import { errorCodes } from '../../constants'
 import { customErrorHandler } from '../../handler'
