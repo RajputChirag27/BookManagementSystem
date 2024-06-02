@@ -8,13 +8,18 @@ import swaggerDocument from '../swagger.json'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import dotenv from 'dotenv'
-const result = dotenv.config()
+dotenv.config()
 
 // Set up mongoose connection
 
-import './config/dbConfig'
+import {connection} from './config/dbConfig'
+const url = process.env.URL
+
+connection(url);
 
 // console.log(process.env)
+
+
 
 const port = process.env.PORT || 3000
 
