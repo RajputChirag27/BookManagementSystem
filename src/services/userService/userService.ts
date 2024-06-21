@@ -43,4 +43,6 @@ export default class UserService {
   async createToken(payload: object): Promise<string> {
     return await this.userRepository.createToken(payload)
   }
+
+  async asingnRoles(roleName) {}
 }

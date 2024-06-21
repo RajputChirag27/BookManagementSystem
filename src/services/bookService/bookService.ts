@@ -20,7 +20,7 @@ class BookService {
   }
 
   // async getBooksViaPipeline(query){
-    
+
   // }
 
   async getBookById(id: string): Promise<Book> {
